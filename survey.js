@@ -224,22 +224,33 @@ function initAutocomplete() {
 
     const input = document.getElementById('q1');
     if (input) {
-        autocomplete = new google.maps.places.Autocomplete(input, {
-            types: ['(cities)'],
-            fields: ['place_id', 'geometry', 'name']
-        });
-        autocomplete.addListener('place_changed', onPlaceChanged);
+        try {
+            autocomplete = new google.maps.places.Autocomplete(input, {
+                types: ['(cities)'],
+                fields: ['place_id', 'geometry', 'name']
+            });
+            autocomplete.addListener('place_changed', onPlaceChanged);
+        } catch (error) {
+            console.error('Error initializing Google Places Autocomplete:', error);
+            showError('Unable to initialize city search. Please enter your city manually.');
+        }
     }
 }
 
 function onPlaceChanged() {
     const place = autocomplete.getPlace();
+    const input = document.getElementById('q1');
     if (!place.geometry) {
-        document.getElementById('q1').placeholder = 'Enter a city';
+        input.placeholder = 'Enter a city';
+        input.classList.add('border-red-500');
         answers[1] = null;
+        showError('Please select a valid city from the suggestions.');
     } else {
         answers[1] = place.name;
-        document.getElementById('q1').value = place.name;
+        input.value = place.name;
+        input.classList.remove('border-red-500');
+        input.classList.add('border-green-500');
+        clearError();
     }
 }
 
@@ -517,7 +528,12 @@ function moveToNextQuestion() {
     if (currentQuestion.id === 1) {
         // City validation
         if (!answers[currentQuestion.id]) {
-            showError('Please select a valid city from the suggestions.');
+            if (googleMapsLoaded) {
+                showError('Please select a valid city from the suggestions.');
+            } else {
+                // If Google Maps failed to load, allow manual entry
+                answers[currentQuestion.id] = input.value.trim();
+            }
             return;
         }
     } else if (currentQuestion.validation && ['text', 'number', 'tel', 'email'].includes(currentQuestion.type)) {
