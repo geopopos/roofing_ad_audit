@@ -278,6 +278,54 @@ nextBtn.addEventListener('click', () => {
 // Initialize the first question
 renderQuestion(currentQuestionIndex);
 
+function calculateResults(surveyData) {
+    let results = {
+        averageAge: 0,
+        satisfactionScore: 0,
+        mostRequestedFeature: '',
+        averageUsage: 0
+    };
+
+    let ageSum = 0;
+    let usageSum = 0;
+    let satisfactionCount = 0;
+    let featureCounts = {};
+
+    surveyData.forEach(item => {
+        switch(item.questionId) {
+            case 1: // Age
+                ageSum += parseInt(item.answer);
+                break;
+            case 2: // Satisfaction
+                const satisfactionMap = {
+                    "Very Satisfied": 5,
+                    "Satisfied": 4,
+                    "Neutral": 3,
+                    "Dissatisfied": 2,
+                    "Very Dissatisfied": 1
+                };
+                results.satisfactionScore += satisfactionMap[item.answer];
+                satisfactionCount++;
+                break;
+            case 3: // Features to improve
+                item.answer.forEach(feature => {
+                    featureCounts[feature] = (featureCounts[feature] || 0) + 1;
+                });
+                break;
+            case 4: // Usage in past month
+                usageSum += parseInt(item.answer);
+                break;
+        }
+    });
+
+    results.averageAge = ageSum / surveyData.filter(item => item.questionId === 1).length;
+    results.satisfactionScore = results.satisfactionScore / satisfactionCount;
+    results.mostRequestedFeature = Object.entries(featureCounts).sort((a, b) => b[1] - a[1])[0][0];
+    results.averageUsage = usageSum / surveyData.filter(item => item.questionId === 4).length;
+
+    return results;
+}
+
 function submitSurvey() {
     console.log('Survey submission');
     const surveyData = questions.map(question => {
@@ -286,6 +334,18 @@ function submitSurvey() {
         return { questionId: question.id, answer: answer };
     });
     console.log('Survey responses:', surveyData);
-    alert('Survey completed! Thank you for your responses.');
+    
+    const results = calculateResults(surveyData);
+    console.log('Calculated results:', results);
+
+    let resultMessage = `
+Survey Results:
+- Average Age: ${results.averageAge.toFixed(1)} years
+- Satisfaction Score: ${results.satisfactionScore.toFixed(2)} out of 5
+- Most Requested Feature to Improve: ${results.mostRequestedFeature}
+- Average Usage in Past Month: ${results.averageUsage.toFixed(1)} times
+    `;
+
+    alert('Survey completed! Thank you for your responses.\n\n' + resultMessage);
     // Here you would typically send the data to a server
 }
