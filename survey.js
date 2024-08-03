@@ -200,15 +200,23 @@ function moveToNextQuestion() {
     const currentQuestion = questions[currentQuestionIndex];
     const input = document.getElementById(`q${currentQuestion.id}`);
 
-    if (currentQuestion.required && !answers[currentQuestion.id]) {
-        alert('This question is required. Please provide an answer.');
-        return;
+    if (currentQuestion.required) {
+        if (currentQuestion.type === 'checkbox') {
+            if (!answers[currentQuestion.id] || answers[currentQuestion.id].length === 0) {
+                alert('This question is required. Please select at least one option.');
+                return;
+            }
+        } else if (!answers[currentQuestion.id] || answers[currentQuestion.id] === '') {
+            alert('This question is required. Please provide an answer.');
+            return;
+        }
     }
 
-    if (currentQuestion.validation) {
+    if (currentQuestion.validation && ['text', 'number', 'tel', 'email'].includes(currentQuestion.type)) {
         const regex = new RegExp(currentQuestion.regex);
         if (!regex.test(input.value)) {
             input.classList.add('border-red-500');
+            alert('Please enter a valid response.');
             return; // Don't move to the next question if validation fails
         }
     }
