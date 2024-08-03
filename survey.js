@@ -46,13 +46,15 @@ function renderQuestion(index) {
             html += `</div>`;
             break;
         case 'checkbox':
-            question.options.forEach(option => {
+            html += `<div class="grid grid-cols-2 gap-2">`;
+            question.options.forEach((option, index) => {
+                const isLastOdd = index === question.options.length - 1 && question.options.length % 2 !== 0;
                 html += `
-                <div class="mb-2">
-                    <input type="checkbox" id="${option}" name="q${question.id}" value="${option}">
-                    <label for="${option}">${option}</label>
-                </div>`;
+                <button type="button" class="checkbox-btn bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded transition-colors duration-200 ${isLastOdd ? 'col-span-2' : ''}" data-value="${option}">
+                    ${option}
+                </button>`;
             });
+            html += `</div>`;
             break;
     }
 
@@ -73,6 +75,21 @@ function renderQuestion(index) {
                 button.classList.add('bg-blue-500', 'text-white');
                 
                 moveToNextQuestion();
+            });
+        });
+    }
+
+    // Add event listeners for checkbox buttons
+    if (question.type === 'checkbox') {
+        console.log('Adding event listeners for checkbox buttons');
+        const checkboxButtons = questionContainer.querySelectorAll('.checkbox-btn');
+        checkboxButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                console.log('Checkbox button clicked:', button.dataset.value);
+                button.classList.toggle('bg-blue-500');
+                button.classList.toggle('text-white');
+                button.classList.toggle('bg-gray-200');
+                button.classList.toggle('text-gray-800');
             });
         });
     }
@@ -138,8 +155,8 @@ function submitSurvey() {
             const selectedButton = document.querySelector('.radio-btn.bg-blue-500');
             answer = selectedButton ? selectedButton.dataset.value : null;
         } else if (question.type === 'checkbox') {
-            answer = Array.from(document.querySelectorAll(`input[name="q${question.id}"]:checked`))
-                .map(checkbox => checkbox.value);
+            answer = Array.from(document.querySelectorAll(`.checkbox-btn.bg-blue-500`))
+                .map(button => button.dataset.value);
         }
         console.log(`Question ${question.id} answer:`, answer);
         return { questionId: question.id, answer: answer };
