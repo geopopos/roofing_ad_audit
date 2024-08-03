@@ -1,95 +1,88 @@
 const calculations = [
     {
-        name: "averageAge",
-        questionId: 1,
-        type: "average",
-        valueType: "number"
+        name: "costPerLead",
+        formula: (totalMarketingCost, numberOfLeads) => totalMarketingCost / numberOfLeads
     },
     {
-        name: "satisfactionScore",
-        questionId: 2,
-        type: "average",
-        valueType: "map",
-        valueMap: {
-            "Very Satisfied": 5,
-            "Satisfied": 4,
-            "Neutral": 3,
-            "Dissatisfied": 2,
-            "Very Dissatisfied": 1
-        }
+        name: "costPerAppointment",
+        formula: (totalMarketingCost, numberOfAppointments) => totalMarketingCost / numberOfAppointments
     },
     {
-        name: "mostRequestedFeature",
-        questionId: 3,
-        type: "mostFrequent"
+        name: "costPerShow",
+        formula: (totalMarketingCost, numberOfShows) => totalMarketingCost / numberOfShows
     },
     {
-        name: "averageUsage",
-        questionId: 4,
-        type: "average",
-        valueType: "number"
+        name: "costPerSale",
+        formula: (totalMarketingCost, numberOfSales) => totalMarketingCost / numberOfSales
+    },
+    {
+        name: "leadToAppointmentConversion",
+        formula: (numberOfAppointments, numberOfLeads) => (numberOfAppointments / numberOfLeads) * 100
+    },
+    {
+        name: "appointmentToShowConversion",
+        formula: (numberOfShows, numberOfAppointments) => (numberOfShows / numberOfAppointments) * 100
+    },
+    {
+        name: "showToSaleConversion",
+        formula: (numberOfSales, numberOfShows) => (numberOfSales / numberOfShows) * 100
     }
 ];
 
 const questions = [
     {
         id: 1,
-        text: "What is your age?",
+        text: "What is your total marketing cost?",
         type: "number",
-        placeholder: "Enter your age",
+        placeholder: "Enter total marketing cost",
         min: 0,
-        max: 120,
         validation: true,
-        regex: "^\\d{1,3}$",
-        validationMessage: "Please enter a valid age between 0 and 120.",
+        regex: "^\\d+(\\.\\d{1,2})?$",
+        validationMessage: "Please enter a valid number with up to 2 decimal places.",
         required: true
     },
     {
         id: 2,
-        text: "How satisfied are you with our service?",
-        type: "radio",
-        options: ["Very Satisfied", "Satisfied", "Neutral", "Dissatisfied", "Very Dissatisfied"],
-        validation: false,
+        text: "How many leads did you generate?",
+        type: "number",
+        placeholder: "Enter number of leads",
+        min: 0,
+        validation: true,
+        regex: "^\\d+$",
+        validationMessage: "Please enter a valid whole number.",
         required: true
     },
     {
         id: 3,
-        text: "What features would you like to see improved? (Select all that apply)",
-        type: "checkbox",
-        options: ["User Interface", "Performance", "Customer Support", "Documentation", "Pricing"],
-        validation: false,
-        required: false
+        text: "How many appointments were set?",
+        type: "number",
+        placeholder: "Enter number of appointments",
+        min: 0,
+        validation: true,
+        regex: "^\\d+$",
+        validationMessage: "Please enter a valid whole number.",
+        required: true
     },
     {
         id: 4,
-        text: "How many times have you used our service in the past month?",
+        text: "How many appointments showed up?",
         type: "number",
-        placeholder: "Enter a number",
+        placeholder: "Enter number of shows",
         min: 0,
-        max: 100,
         validation: true,
-        regex: "^\\d{1,3}$",
-        validationMessage: "Please enter a number between 0 and 100.",
+        regex: "^\\d+$",
+        validationMessage: "Please enter a valid whole number.",
         required: true
     },
     {
         id: 5,
-        text: "What is your phone number?",
-        type: "tel",
-        placeholder: "Enter your phone number",
+        text: "How many sales did you close?",
+        type: "number",
+        placeholder: "Enter number of sales",
+        min: 0,
         validation: true,
-        regex: "^\\+?\\d{10,14}$",
-        validationMessage: "Please enter a valid phone number (10-14 digits, optionally starting with +).",
-        required: false
-    },
-    {
-        id: 6,
-        text: "What is your email address?",
-        type: "email",
-        placeholder: "Enter your email address",
-        validation: true,
-        regex: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
-        validationMessage: "Please enter a valid email address.",
+        regex: "^\\d+$",
+        validationMessage: "Please enter a valid whole number.",
         required: true
     }
 ];
@@ -313,32 +306,34 @@ renderQuestion(currentQuestionIndex);
 
 function calculateResults(surveyData) {
     let results = {};
+    const answers = {};
+
+    surveyData.forEach(item => {
+        answers[item.questionId] = parseFloat(item.answer);
+    });
 
     calculations.forEach(calc => {
-        const relevantData = surveyData.filter(item => item.questionId === calc.questionId);
-
-        switch (calc.type) {
-            case "average":
-                if (calc.valueType === "number") {
-                    const sum = relevantData.reduce((acc, item) => acc + parseFloat(item.answer), 0);
-                    results[calc.name] = sum / relevantData.length;
-                } else if (calc.valueType === "map") {
-                    const sum = relevantData.reduce((acc, item) => acc + calc.valueMap[item.answer], 0);
-                    results[calc.name] = sum / relevantData.length;
-                }
+        switch (calc.name) {
+            case "costPerLead":
+                results[calc.name] = calc.formula(answers[1], answers[2]);
                 break;
-            case "mostFrequent":
-                const counts = {};
-                relevantData.forEach(item => {
-                    if (Array.isArray(item.answer)) {
-                        item.answer.forEach(ans => {
-                            counts[ans] = (counts[ans] || 0) + 1;
-                        });
-                    } else {
-                        counts[item.answer] = (counts[item.answer] || 0) + 1;
-                    }
-                });
-                results[calc.name] = Object.entries(counts).sort((a, b) => b[1] - a[1])[0][0];
+            case "costPerAppointment":
+                results[calc.name] = calc.formula(answers[1], answers[3]);
+                break;
+            case "costPerShow":
+                results[calc.name] = calc.formula(answers[1], answers[4]);
+                break;
+            case "costPerSale":
+                results[calc.name] = calc.formula(answers[1], answers[5]);
+                break;
+            case "leadToAppointmentConversion":
+                results[calc.name] = calc.formula(answers[3], answers[2]);
+                break;
+            case "appointmentToShowConversion":
+                results[calc.name] = calc.formula(answers[4], answers[3]);
+                break;
+            case "showToSaleConversion":
+                results[calc.name] = calc.formula(answers[5], answers[4]);
                 break;
         }
     });
@@ -347,26 +342,26 @@ function calculateResults(surveyData) {
 }
 
 function submitSurvey() {
-    console.log('Survey submission');
+    console.log('Calculator submission');
     const surveyData = questions.map(question => {
         const answer = answers[question.id];
         console.log(`Question ${question.id} answer:`, answer);
         return { questionId: question.id, answer: answer };
     });
-    console.log('Survey responses:', surveyData);
+    console.log('Calculator responses:', surveyData);
     
     const results = calculateResults(surveyData);
     console.log('Calculated results:', results);
 
-    let resultMessage = "Survey Results:\n";
-    calculations.forEach(calc => {
-        let value = results[calc.name];
-        if (typeof value === 'number') {
-            value = value.toFixed(2);
-        }
-        resultMessage += `- ${calc.name}: ${value}\n`;
-    });
+    let resultMessage = "Roofer's Calculator Results:\n\n";
+    resultMessage += `Cost per Lead: $${results.costPerLead.toFixed(2)}\n`;
+    resultMessage += `Cost per Appointment: $${results.costPerAppointment.toFixed(2)}\n`;
+    resultMessage += `Cost per Show: $${results.costPerShow.toFixed(2)}\n`;
+    resultMessage += `Cost per Sale: $${results.costPerSale.toFixed(2)}\n\n`;
+    resultMessage += `Lead to Appointment Conversion: ${results.leadToAppointmentConversion.toFixed(2)}%\n`;
+    resultMessage += `Appointment to Show Conversion: ${results.appointmentToShowConversion.toFixed(2)}%\n`;
+    resultMessage += `Show to Sale Conversion: ${results.showToSaleConversion.toFixed(2)}%`;
 
-    alert('Survey completed! Thank you for your responses.\n\n' + resultMessage);
+    alert(resultMessage);
     // Here you would typically send the data to a server
 }
