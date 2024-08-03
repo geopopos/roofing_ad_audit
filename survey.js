@@ -44,6 +44,9 @@ const calculations = [
 let autocomplete;
 
 function formatCurrency(input) {
+    // Store the current cursor position
+    const cursorPos = input.selectionStart;
+    
     // Remove all non-digit characters except for the last decimal point
     let value = input.value.replace(/[^\d.]/g, '').replace(/\.(?=.*\.)/g, '');
     
@@ -55,15 +58,21 @@ function formatCurrency(input) {
     }
     
     // Format the number with commas and two decimal places
-    value = parseFloat(value || 0).toLocaleString('en-US', {
+    const formattedValue = parseFloat(value || 0).toLocaleString('en-US', {
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
     });
     
+    // Calculate the difference in length between the old and new values
+    const lengthDiff = formattedValue.length - input.value.length;
+    
     // Update the input value
-    input.value = value;
+    input.value = formattedValue;
+    
+    // Adjust the cursor position
+    input.setSelectionRange(cursorPos + lengthDiff, cursorPos + lengthDiff);
 }
 
 const questions = [
