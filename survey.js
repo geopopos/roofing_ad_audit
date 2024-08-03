@@ -260,7 +260,9 @@ function renderQuestion(index) {
 
         // Initialize Google Places Autocomplete for the city question
         if (question.id === 1) {
-            initAutocomplete();
+            setTimeout(() => {
+                initAutocomplete();
+            }, 0);
         }
 
         // ... (rest of the function)
