@@ -8,6 +8,7 @@ const questions = [
         max: 120,
         validation: true,
         regex: "^\\d{1,3}$",
+        validationMessage: "Please enter a valid age between 0 and 120.",
         required: true
     },
     {
@@ -35,6 +36,7 @@ const questions = [
         max: 100,
         validation: true,
         regex: "^\\d{1,3}$",
+        validationMessage: "Please enter a number between 0 and 100.",
         required: true
     },
     {
@@ -44,6 +46,7 @@ const questions = [
         placeholder: "Enter your phone number",
         validation: true,
         regex: "^\\+?\\d{10,14}$",
+        validationMessage: "Please enter a valid phone number (10-14 digits, optionally starting with +).",
         required: false
     },
     {
@@ -53,6 +56,7 @@ const questions = [
         placeholder: "Enter your email address",
         validation: true,
         regex: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+        validationMessage: "Please enter a valid email address.",
         required: true
     }
 ];
