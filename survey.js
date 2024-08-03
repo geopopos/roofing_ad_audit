@@ -118,6 +118,36 @@ const questions = [
         regex: "^\\d+(\\.\\d{1,2})?$",
         validationMessage: "Please enter a valid number with up to 2 decimal places.",
         required: true
+    },
+    {
+        id: 8,
+        text: "What is your name?",
+        type: "text",
+        placeholder: "Enter your full name",
+        validation: true,
+        regex: "^[a-zA-Z ]+$",
+        validationMessage: "Please enter a valid name (letters and spaces only).",
+        required: true
+    },
+    {
+        id: 9,
+        text: "What is your phone number?",
+        type: "tel",
+        placeholder: "Enter your phone number",
+        validation: true,
+        regex: "^\\+?[1-9]\\d{1,14}$",
+        validationMessage: "Please enter a valid phone number.",
+        required: true
+    },
+    {
+        id: 10,
+        text: "What is your email address?",
+        type: "email",
+        placeholder: "Enter your email address",
+        validation: true,
+        regex: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+        validationMessage: "Please enter a valid email address.",
+        required: true
     }
 ];
 
@@ -464,7 +494,10 @@ function submitSurvey() {
         appointmentToShowConversion: (results.appointmentToShowConversion || 0).toFixed(2),
         showToSaleConversion: (results.showToSaleConversion || 0).toFixed(2),
         averageSaleValue: (results.averageSaleValue || 0).toFixed(2),
-        roas: (results.roas || 0).toFixed(2)
+        roas: (results.roas || 0).toFixed(2),
+        name: answers[8] || '',
+        phoneNumber: answers[9] || '',
+        email: answers[10] || ''
     });
 
     window.location.href = `thankyou.html?${queryParams.toString()}`;
