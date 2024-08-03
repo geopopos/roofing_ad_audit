@@ -5,7 +5,8 @@ const questions = [
         type: "number",
         placeholder: "Enter your age",
         min: 0,
-        max: 120
+        max: 120,
+        validation: "^\\d{1,3}$"
     },
     {
         id: 2,
@@ -25,19 +26,22 @@ const questions = [
         type: "number",
         placeholder: "Enter a number",
         min: 0,
-        max: 100
+        max: 100,
+        validation: "^\\d{1,3}$"
     },
     {
         id: 5,
         text: "What is your phone number?",
         type: "tel",
-        placeholder: "Enter your phone number"
+        placeholder: "Enter your phone number",
+        validation: "^\\+?\\d{10,14}$"
     },
     {
         id: 6,
         text: "What is your email address?",
         type: "email",
-        placeholder: "Enter your email address"
+        placeholder: "Enter your email address",
+        validation: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
     }
 ];
 
@@ -55,16 +59,10 @@ function renderQuestion(index) {
 
     switch (question.type) {
         case 'text':
-            html += `<input type="text" id="q${question.id}" class="w-full p-2 border rounded" placeholder="${question.placeholder}" autofocus>`;
-            break;
         case 'number':
-            html += `<input type="number" id="q${question.id}" class="w-full p-2 border rounded" placeholder="${question.placeholder}" min="${question.min}" max="${question.max}" autofocus>`;
-            break;
         case 'tel':
-            html += `<input type="tel" id="q${question.id}" class="w-full p-2 border rounded" placeholder="${question.placeholder}" autofocus>`;
-            break;
         case 'email':
-            html += `<input type="email" id="q${question.id}" class="w-full p-2 border rounded" placeholder="${question.placeholder}" autofocus>`;
+            html += `<input type="${question.type}" id="q${question.id}" class="w-full p-2 border rounded" placeholder="${question.placeholder}" ${question.min !== undefined ? `min="${question.min}"` : ''} ${question.max !== undefined ? `max="${question.max}"` : ''} ${question.validation ? `pattern="${question.validation}"` : ''} autofocus>`;
             break;
         case 'radio':
             html += `<div class="grid grid-cols-2 gap-2">`;
@@ -141,11 +139,23 @@ function renderQuestion(index) {
         const input = document.getElementById(`q${question.id}`);
         input.addEventListener('input', (event) => {
             answers[question.id] = event.target.value;
+            if (question.validation) {
+                const regex = new RegExp(question.validation);
+                if (regex.test(event.target.value)) {
+                    input.classList.remove('border-red-500');
+                    input.classList.add('border-green-500');
+                } else {
+                    input.classList.remove('border-green-500');
+                    input.classList.add('border-red-500');
+                }
+            }
         });
         input.addEventListener('keypress', (event) => {
             if (event.key === 'Enter') {
                 event.preventDefault();
-                moveToNextQuestion();
+                if (!question.validation || (question.validation && new RegExp(question.validation).test(input.value))) {
+                    moveToNextQuestion();
+                }
             }
         });
     }
@@ -169,6 +179,17 @@ function updateButtons() {
 }
 
 function moveToNextQuestion() {
+    const currentQuestion = questions[currentQuestionIndex];
+    const input = document.getElementById(`q${currentQuestion.id}`);
+
+    if (currentQuestion.validation) {
+        const regex = new RegExp(currentQuestion.validation);
+        if (!regex.test(input.value)) {
+            input.classList.add('border-red-500');
+            return; // Don't move to the next question if validation fails
+        }
+    }
+
     setTimeout(() => {
         if (currentQuestionIndex < questions.length - 1) {
             currentQuestionIndex++;
