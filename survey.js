@@ -235,6 +235,9 @@ function renderQuestion(index) {
     
     clearError();
 
+    // Update progress bar
+    updateProgress(index);
+
     switch (question.type) {
         case 'text':
         case 'number':
@@ -375,6 +378,15 @@ function clearError() {
     const errorElement = document.getElementById('error-message');
     errorElement.textContent = '';
     errorElement.classList.add('hidden');
+}
+
+function updateProgress(index) {
+    const progressBar = document.getElementById('progress-bar');
+    const progressText = document.getElementById('progress-text');
+    const progress = ((index + 1) / questions.length) * 100;
+    
+    progressBar.style.width = `${progress}%`;
+    progressText.textContent = `Question ${index + 1} of ${questions.length}`;
 }
 
 function moveToNextQuestion() {
