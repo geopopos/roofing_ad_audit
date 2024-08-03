@@ -11,12 +11,20 @@
     <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-2xl">
         <h1 class="text-3xl font-bold mb-6 text-center text-blue-600">Thank You!</h1>
         <h2 class="text-2xl font-semibold mb-4 text-gray-700">Roofer's Calculator Results:</h2>
+        <h3 id="city-info" class="text-xl font-semibold mb-4 text-gray-600"></h3>
         <div id="results" class="space-y-4"></div>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const params = new URLSearchParams(window.location.search);
             const resultsDiv = document.getElementById('results');
+            const cityInfoDiv = document.getElementById('city-info');
+            
+            // Display city information
+            const city = params.get('city');
+            if (city) {
+                cityInfoDiv.textContent = `Results for ${city}`;
+            }
 
             // Function to determine color based on value compared to average
             function getColorClass(value, average, isHigherBetter = false) {

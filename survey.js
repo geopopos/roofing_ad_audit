@@ -44,6 +44,16 @@ const calculations = [
 const questions = [
     {
         id: 1,
+        text: "What city are you located in?",
+        type: "text",
+        placeholder: "Enter your city",
+        validation: true,
+        regex: "^[a-zA-Z\\s-]+$",
+        validationMessage: "Please enter a valid city name.",
+        required: true
+    },
+    {
+        id: 2,
         text: "What is your total marketing cost?",
         type: "number",
         placeholder: "Enter total marketing cost",
@@ -54,7 +64,7 @@ const questions = [
         required: true
     },
     {
-        id: 2,
+        id: 3,
         text: "How many leads did you generate?",
         type: "number",
         placeholder: "Enter number of leads",
@@ -65,7 +75,7 @@ const questions = [
         required: true
     },
     {
-        id: 3,
+        id: 4,
         text: "How many appointments were set?",
         type: "number",
         placeholder: "Enter number of appointments",
@@ -76,7 +86,7 @@ const questions = [
         required: true
     },
     {
-        id: 4,
+        id: 5,
         text: "How many appointments showed up?",
         type: "number",
         placeholder: "Enter number of shows",
@@ -87,7 +97,7 @@ const questions = [
         required: true
     },
     {
-        id: 5,
+        id: 6,
         text: "How many sales did you close?",
         type: "number",
         placeholder: "Enter number of sales",
@@ -98,7 +108,7 @@ const questions = [
         required: true
     },
     {
-        id: 6,
+        id: 7,
         text: "What is your total revenue generated?",
         type: "number",
         placeholder: "Enter total revenue",
@@ -388,12 +398,13 @@ function submitSurvey() {
     console.log('Calculated results:', results);
 
     const queryParams = new URLSearchParams({
-        totalMarketingCost: answers[1] || '0',
-        numberOfLeads: answers[2] || '0',
-        numberOfAppointments: answers[3] || '0',
-        numberOfShows: answers[4] || '0',
-        numberOfSales: answers[5] || '0',
-        totalRevenue: answers[6] || '0',
+        city: answers[1] || '',
+        totalMarketingCost: answers[2] || '0',
+        numberOfLeads: answers[3] || '0',
+        numberOfAppointments: answers[4] || '0',
+        numberOfShows: answers[5] || '0',
+        numberOfSales: answers[6] || '0',
+        totalRevenue: answers[7] || '0',
         costPerLead: (results.costPerLead || 0).toFixed(2),
         costPerAppointment: (results.costPerAppointment || 0).toFixed(2),
         costPerShow: (results.costPerShow || 0).toFixed(2),
