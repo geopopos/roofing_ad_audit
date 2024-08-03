@@ -88,6 +88,24 @@ const questions = [
     },
     {
         id: 2,
+        text: "How do you currently generate roofing leads?",
+        type: "checkbox",
+        options: [
+            "Lead broker (Angi, Thumbtack, CraftJack, etc)",
+            "Facebook/Instagram Ads",
+            "Google Ads",
+            "NextDoor Ads",
+            "Yelp Ads",
+            "News Paper",
+            "Direct Mail",
+            "Cold Calling",
+            "DoorKnocking",
+            "Other"
+        ],
+        required: true
+    },
+    {
+        id: 3,
         text: "What is your total marketing cost? (Just a guess is fine)",
         type: "text",
         placeholder: "Enter total marketing cost",
@@ -99,7 +117,7 @@ const questions = [
         format: formatCurrency
     },
     {
-        id: 3,
+        id: 4,
         text: "How many leads did you generate?",
         type: "number",
         placeholder: "Enter number of leads",
@@ -110,7 +128,7 @@ const questions = [
         required: true
     },
     {
-        id: 4,
+        id: 5,
         text: "How many appointments were set?",
         type: "number",
         placeholder: "Enter number of appointments",
@@ -121,7 +139,7 @@ const questions = [
         required: true
     },
     {
-        id: 5,
+        id: 6,
         text: "How many appointments showed up?",
         type: "number",
         placeholder: "Enter number of shows",
@@ -132,7 +150,7 @@ const questions = [
         required: true
     },
     {
-        id: 6,
+        id: 7,
         text: "How many sales did you close?",
         type: "number",
         placeholder: "Enter number of sales",
@@ -143,7 +161,7 @@ const questions = [
         required: true
     },
     {
-        id: 7,
+        id: 8,
         text: "What is your total revenue generated?",
         type: "number",
         placeholder: "Enter total revenue",
@@ -154,7 +172,7 @@ const questions = [
         required: true
     },
     {
-        id: 8,
+        id: 9,
         text: "What is your name?",
         type: "text",
         placeholder: "Enter your full name",
@@ -164,7 +182,7 @@ const questions = [
         required: true
     },
     {
-        id: 10,
+        id: 11,
         text: "What is your email address? (This will be used to send you your instant audit)",
         type: "email",
         placeholder: "Enter your email address",
@@ -174,7 +192,7 @@ const questions = [
         required: true
     },
     {
-        id: 9,
+        id: 10,
         text: "What is your phone number? (This will be used to send you your instant audit)",
         type: "tel",
         placeholder: "Enter your phone number",
