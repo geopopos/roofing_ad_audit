@@ -524,41 +524,46 @@ function calculateResults(surveyData) {
     const answers = {};
 
     surveyData.forEach(item => {
-        answers[item.questionId] = parseFloat(item.answer);
+        if (item.questionId === 2) {
+            // Handle the checkbox question for marketing methods
+            answers[item.questionId] = item.answer;
+        } else {
+            answers[item.questionId] = parseFloat(item.answer) || 0;
+        }
     });
 
     calculations.forEach(calc => {
         let result;
         switch (calc.name) {
             case "totalRevenue":
-                result = calc.formula(answers[7]);
+                result = calc.formula(answers[8]);
                 break;
             case "averageSaleValue":
-                result = calc.formula(answers[7], answers[6]);
+                result = calc.formula(answers[8], answers[7]);
                 break;
             case "roas":
-                result = calc.formula(answers[7], answers[2]);
+                result = calc.formula(answers[8], answers[3]);
                 break;
             case "costPerLead":
-                result = calc.formula(answers[2], answers[3]);
+                result = calc.formula(answers[3], answers[4]);
                 break;
             case "costPerAppointment":
-                result = calc.formula(answers[2], answers[4]);
+                result = calc.formula(answers[3], answers[5]);
                 break;
             case "costPerShow":
-                result = calc.formula(answers[2], answers[5]);
+                result = calc.formula(answers[3], answers[6]);
                 break;
             case "costPerSale":
-                result = calc.formula(answers[2], answers[6]);
+                result = calc.formula(answers[3], answers[7]);
                 break;
             case "leadToAppointmentConversion":
-                result = calc.formula(answers[4], answers[3]);
-                break;
-            case "appointmentToShowConversion":
                 result = calc.formula(answers[5], answers[4]);
                 break;
-            case "showToSaleConversion":
+            case "appointmentToShowConversion":
                 result = calc.formula(answers[6], answers[5]);
+                break;
+            case "showToSaleConversion":
+                result = calc.formula(answers[7], answers[6]);
                 break;
         }
         results[calc.name] = isNaN(result) || !isFinite(result) ? 0 : parseFloat(result.toFixed(2));
@@ -571,9 +576,11 @@ function submitSurvey() {
     console.log('Calculator submission');
     const surveyData = questions.map(question => {
         let answer = answers[question.id];
-        if (question.format) {
+        if (question.type === 'checkbox') {
+            answer = Array.isArray(answer) ? answer.join(',') : '';
+        } else if (question.format) {
             // Remove currency formatting for calculation
-            answer = parseFloat(answer.replace(/[^0-9.-]+/g, ""));
+            answer = parseFloat(answer.replace(/[^0-9.-]+/g, "")) || 0;
         }
         console.log(`Question ${question.id} answer:`, answer);
         return { questionId: question.id, answer: answer };
@@ -585,12 +592,13 @@ function submitSurvey() {
 
     const queryParams = new URLSearchParams({
         city: answers[1] || '',
-        totalMarketingCost: surveyData.find(item => item.questionId === 2)?.answer || '0',
-        numberOfLeads: answers[3] || '0',
-        numberOfAppointments: answers[4] || '0',
-        numberOfShows: answers[5] || '0',
-        numberOfSales: answers[6] || '0',
-        totalRevenue: surveyData.find(item => item.questionId === 7)?.answer || '0',
+        marketingMethods: surveyData.find(item => item.questionId === 2)?.answer || '',
+        totalMarketingCost: surveyData.find(item => item.questionId === 3)?.answer || '0',
+        numberOfLeads: answers[4] || '0',
+        numberOfAppointments: answers[5] || '0',
+        numberOfShows: answers[6] || '0',
+        numberOfSales: answers[7] || '0',
+        totalRevenue: surveyData.find(item => item.questionId === 8)?.answer || '0',
         costPerLead: (results.costPerLead || 0).toFixed(2),
         costPerAppointment: (results.costPerAppointment || 0).toFixed(2),
         costPerShow: (results.costPerShow || 0).toFixed(2),
@@ -600,9 +608,9 @@ function submitSurvey() {
         showToSaleConversion: (results.showToSaleConversion || 0).toFixed(2),
         averageSaleValue: (results.averageSaleValue || 0).toFixed(2),
         roas: (results.roas || 0).toFixed(2),
-        name: answers[8] || '',
-        phoneNumber: answers[9] || '',
-        email: answers[10] || ''
+        name: answers[9] || '',
+        phoneNumber: answers[10] || '',
+        email: answers[11] || ''
     });
 
     // Trigger confetti effect
