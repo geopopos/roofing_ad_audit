@@ -37,7 +37,7 @@ function renderQuestion(index) {
             html += `<div class="flex flex-wrap gap-2">`;
             question.options.forEach(option => {
                 html += `
-                <button type="button" class="radio-btn bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded" data-value="${option}">
+                <button type="button" class="radio-btn bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded transition-colors duration-200" data-value="${option}">
                     ${option}
                 </button>`;
             });
@@ -66,8 +66,6 @@ function renderQuestion(index) {
             });
         });
     }
-
-    questionContainer.innerHTML = html;
     updateButtons();
 }
 
