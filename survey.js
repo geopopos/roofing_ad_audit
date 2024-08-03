@@ -235,10 +235,14 @@ function renderQuestion(index) {
     
     clearError();
 
-    // Update progress bar
-    updateProgress(index);
+    // Fade out the current question
+    questionContainer.classList.add('fade-out');
 
-    switch (question.type) {
+    setTimeout(() => {
+        // Update progress bar
+        updateProgress(index);
+
+        switch (question.type) {
         case 'text':
         case 'number':
         case 'tel':
@@ -351,6 +355,14 @@ function renderQuestion(index) {
     }
     updateButtons();
     setFocusOnTextInput();
+
+    // Fade in the new question
+    setTimeout(() => {
+        questionContainer.classList.remove('fade-out');
+        questionContainer.classList.add('fade-in');
+    }, 50);
+    }
+}, 300); // This timeout should match the transition duration in CSS
 }
 
 function setFocusOnTextInput() {
@@ -384,8 +396,13 @@ function updateProgress(index) {
     const progressBar = document.getElementById('progress-bar');
     const progress = ((index + 1) / questions.length) * 100;
     
+    // Animate the progress bar width
     progressBar.style.width = `${progress}%`;
-    progressBar.textContent = `${Math.round(progress)}%`;
+    
+    // Update the text content after a short delay to allow for the width animation
+    setTimeout(() => {
+        progressBar.textContent = `${Math.round(progress)}%`;
+    }, 150);
 }
 
 function moveToNextQuestion() {
