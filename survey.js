@@ -205,12 +205,23 @@ const questions = [
 
 let currentQuestionIndex = 0;
 let answers = {};
+let autocomplete;
+let googleMapsLoaded = false;
 
 const questionContainer = document.getElementById('question-container');
 const prevBtn = document.getElementById('prev-btn');
 const nextBtn = document.getElementById('next-btn');
 
+function initMap() {
+    googleMapsLoaded = true;
+    if (currentQuestionIndex === 0) {
+        initAutocomplete();
+    }
+}
+
 function initAutocomplete() {
+    if (!googleMapsLoaded) return;
+
     const input = document.getElementById('q1');
     if (input) {
         autocomplete = new google.maps.places.Autocomplete(input, {
@@ -260,9 +271,7 @@ function renderQuestion(index) {
 
         // Initialize Google Places Autocomplete for the city question
         if (question.id === 1) {
-            setTimeout(() => {
-                initAutocomplete();
-            }, 0);
+            initAutocomplete();
         }
 
         // ... (rest of the function)
