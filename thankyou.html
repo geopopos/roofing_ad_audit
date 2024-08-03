@@ -81,7 +81,12 @@
                         { label: 'Cost per Sale', value: `$${parseFloat(params.get('costPerSale')).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`, compare: 'costPerSale' },
                         { label: 'Show to Sale Conversion', value: `${parseFloat(params.get('showToSaleConversion')).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}%`, compare: 'showToSaleConversion', higherIsBetter: true },
                         { label: 'Total Revenue', value: `$${parseFloat(params.get('totalRevenue')).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}` },
-                        { label: 'Average Sale Value', value: `$${parseFloat(params.get('averageSaleValue')).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`, compare: 'averageSaleValue', higherIsBetter: true },
+                        { label: 'Average Sale Value', value: `$${parseFloat(params.get('averageSaleValue')).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`, compare: 'averageSaleValue', higherIsBetter: true }
+                    ]
+                },
+                {
+                    title: 'Return on Investment',
+                    items: [
                         { label: 'ROAS (Return on Ad Spend)', value: `${parseFloat(params.get('roas')).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}x`, compare: 'roas', higherIsBetter: true }
                     ]
                 }
