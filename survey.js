@@ -6,19 +6,22 @@ const questions = [
         placeholder: "Enter your age",
         min: 0,
         max: 120,
-        validation: "^\\d{1,3}$"
+        validation: true,
+        regex: "^\\d{1,3}$"
     },
     {
         id: 2,
         text: "How satisfied are you with our service?",
         type: "radio",
-        options: ["Very Satisfied", "Satisfied", "Neutral", "Dissatisfied", "Very Dissatisfied"]
+        options: ["Very Satisfied", "Satisfied", "Neutral", "Dissatisfied", "Very Dissatisfied"],
+        validation: false
     },
     {
         id: 3,
         text: "What features would you like to see improved? (Select all that apply)",
         type: "checkbox",
-        options: ["User Interface", "Performance", "Customer Support", "Documentation", "Pricing"]
+        options: ["User Interface", "Performance", "Customer Support", "Documentation", "Pricing"],
+        validation: false
     },
     {
         id: 4,
@@ -27,21 +30,24 @@ const questions = [
         placeholder: "Enter a number",
         min: 0,
         max: 100,
-        validation: "^\\d{1,3}$"
+        validation: true,
+        regex: "^\\d{1,3}$"
     },
     {
         id: 5,
         text: "What is your phone number?",
         type: "tel",
         placeholder: "Enter your phone number",
-        validation: "^\\+?\\d{10,14}$"
+        validation: true,
+        regex: "^\\+?\\d{10,14}$"
     },
     {
         id: 6,
         text: "What is your email address?",
         type: "email",
         placeholder: "Enter your email address",
-        validation: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+        validation: true,
+        regex: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
     }
 ];
 
@@ -62,7 +68,7 @@ function renderQuestion(index) {
         case 'number':
         case 'tel':
         case 'email':
-            html += `<input type="${question.type}" id="q${question.id}" class="w-full p-2 border rounded" placeholder="${question.placeholder}" ${question.min !== undefined ? `min="${question.min}"` : ''} ${question.max !== undefined ? `max="${question.max}"` : ''} ${question.validation ? `pattern="${question.validation}"` : ''} autofocus>`;
+            html += `<input type="${question.type}" id="q${question.id}" class="w-full p-2 border rounded" placeholder="${question.placeholder}" ${question.min !== undefined ? `min="${question.min}"` : ''} ${question.max !== undefined ? `max="${question.max}"` : ''} ${question.validation ? `pattern="${question.regex}"` : ''} autofocus>`;
             break;
         case 'radio':
             html += `<div class="grid grid-cols-2 gap-2">`;
@@ -140,7 +146,7 @@ function renderQuestion(index) {
         input.addEventListener('input', (event) => {
             answers[question.id] = event.target.value;
             if (question.validation) {
-                const regex = new RegExp(question.validation);
+                const regex = new RegExp(question.regex);
                 if (regex.test(event.target.value)) {
                     input.classList.remove('border-red-500');
                     input.classList.add('border-green-500');
@@ -153,7 +159,7 @@ function renderQuestion(index) {
         input.addEventListener('keypress', (event) => {
             if (event.key === 'Enter') {
                 event.preventDefault();
-                if (!question.validation || (question.validation && new RegExp(question.validation).test(input.value))) {
+                if (!question.validation || (question.validation && new RegExp(question.regex).test(input.value))) {
                     moveToNextQuestion();
                 }
             }
@@ -183,7 +189,7 @@ function moveToNextQuestion() {
     const input = document.getElementById(`q${currentQuestion.id}`);
 
     if (currentQuestion.validation) {
-        const regex = new RegExp(currentQuestion.validation);
+        const regex = new RegExp(currentQuestion.regex);
         if (!regex.test(input.value)) {
             input.classList.add('border-red-500');
             return; // Don't move to the next question if validation fails
