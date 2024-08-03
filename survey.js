@@ -336,29 +336,40 @@ function calculateResults(surveyData) {
     });
 
     calculations.forEach(calc => {
+        let result;
         switch (calc.name) {
+            case "totalRevenue":
+                result = calc.formula(answers[6]);
+                break;
+            case "averageSaleValue":
+                result = calc.formula(answers[6], answers[5]);
+                break;
+            case "roas":
+                result = calc.formula(answers[6], answers[1]);
+                break;
             case "costPerLead":
-                results[calc.name] = calc.formula(answers[1], answers[2]);
+                result = calc.formula(answers[1], answers[2]);
                 break;
             case "costPerAppointment":
-                results[calc.name] = calc.formula(answers[1], answers[3]);
+                result = calc.formula(answers[1], answers[3]);
                 break;
             case "costPerShow":
-                results[calc.name] = calc.formula(answers[1], answers[4]);
+                result = calc.formula(answers[1], answers[4]);
                 break;
             case "costPerSale":
-                results[calc.name] = calc.formula(answers[1], answers[5]);
+                result = calc.formula(answers[1], answers[5]);
                 break;
             case "leadToAppointmentConversion":
-                results[calc.name] = calc.formula(answers[3], answers[2]);
+                result = calc.formula(answers[3], answers[2]);
                 break;
             case "appointmentToShowConversion":
-                results[calc.name] = calc.formula(answers[4], answers[3]);
+                result = calc.formula(answers[4], answers[3]);
                 break;
             case "showToSaleConversion":
-                results[calc.name] = calc.formula(answers[5], answers[4]);
+                result = calc.formula(answers[5], answers[4]);
                 break;
         }
+        results[calc.name] = isNaN(result) || !isFinite(result) ? 0 : result;
     });
 
     return results;
@@ -377,21 +388,21 @@ function submitSurvey() {
     console.log('Calculated results:', results);
 
     const queryParams = new URLSearchParams({
-        totalMarketingCost: answers[1],
-        numberOfLeads: answers[2],
-        numberOfAppointments: answers[3],
-        numberOfShows: answers[4],
-        numberOfSales: answers[5],
-        totalRevenue: answers[6],
-        costPerLead: results.costPerLead.toFixed(2),
-        costPerAppointment: results.costPerAppointment.toFixed(2),
-        costPerShow: results.costPerShow.toFixed(2),
-        costPerSale: results.costPerSale.toFixed(2),
-        leadToAppointmentConversion: results.leadToAppointmentConversion.toFixed(2),
-        appointmentToShowConversion: results.appointmentToShowConversion.toFixed(2),
-        showToSaleConversion: results.showToSaleConversion.toFixed(2),
-        averageSaleValue: results.averageSaleValue.toFixed(2),
-        roas: results.roas.toFixed(2)
+        totalMarketingCost: answers[1] || '0',
+        numberOfLeads: answers[2] || '0',
+        numberOfAppointments: answers[3] || '0',
+        numberOfShows: answers[4] || '0',
+        numberOfSales: answers[5] || '0',
+        totalRevenue: answers[6] || '0',
+        costPerLead: (results.costPerLead || 0).toFixed(2),
+        costPerAppointment: (results.costPerAppointment || 0).toFixed(2),
+        costPerShow: (results.costPerShow || 0).toFixed(2),
+        costPerSale: (results.costPerSale || 0).toFixed(2),
+        leadToAppointmentConversion: (results.leadToAppointmentConversion || 0).toFixed(2),
+        appointmentToShowConversion: (results.appointmentToShowConversion || 0).toFixed(2),
+        showToSaleConversion: (results.showToSaleConversion || 0).toFixed(2),
+        averageSaleValue: (results.averageSaleValue || 0).toFixed(2),
+        roas: (results.roas || 0).toFixed(2)
     });
 
     window.location.href = `thankyou.html?${queryParams.toString()}`;
