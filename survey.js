@@ -43,6 +43,20 @@ const calculations = [
 
 let autocomplete;
 
+function formatCurrency(input) {
+    // Remove non-digit characters
+    let value = input.value.replace(/[^\d.]/g, '');
+    // Format the number with commas and two decimal places
+    value = parseFloat(value).toLocaleString('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
+    // Update the input value
+    input.value = value;
+}
+
 const questions = [
     {
         id: 1,
@@ -56,13 +70,14 @@ const questions = [
     {
         id: 2,
         text: "What is your total marketing cost? (Just a guess is fine)",
-        type: "number",
+        type: "text",
         placeholder: "Enter total marketing cost",
         min: 0,
         validation: true,
-        regex: "^\\d+(\\.\\d{1,2})?$",
-        validationMessage: "Please enter a valid number with up to 2 decimal places.",
-        required: true
+        regex: "^\\$?\\d{1,3}(,\\d{3})*(\\.\\d{2})?$",
+        validationMessage: "Please enter a valid currency amount.",
+        required: true,
+        format: formatCurrency
     },
     {
         id: 3,
@@ -288,6 +303,9 @@ function renderQuestion(index) {
     if (['text', 'number', 'tel', 'email'].includes(question.type)) {
         const input = document.getElementById(`q${question.id}`);
         input.addEventListener('input', (event) => {
+            if (question.format) {
+                question.format(input);
+            }
             answers[question.id] = event.target.value;
             if (question.validation) {
                 const regex = new RegExp(question.regex);
@@ -469,7 +487,11 @@ function calculateResults(surveyData) {
 function submitSurvey() {
     console.log('Calculator submission');
     const surveyData = questions.map(question => {
-        const answer = answers[question.id];
+        let answer = answers[question.id];
+        if (question.format) {
+            // Remove currency formatting for calculation
+            answer = parseFloat(answer.replace(/[^0-9.-]+/g, ""));
+        }
         console.log(`Question ${question.id} answer:`, answer);
         return { questionId: question.id, answer: answer };
     });
@@ -480,12 +502,12 @@ function submitSurvey() {
 
     const queryParams = new URLSearchParams({
         city: answers[1] || '',
-        totalMarketingCost: answers[2] || '0',
+        totalMarketingCost: surveyData.find(item => item.questionId === 2)?.answer || '0',
         numberOfLeads: answers[3] || '0',
         numberOfAppointments: answers[4] || '0',
         numberOfShows: answers[5] || '0',
         numberOfSales: answers[6] || '0',
-        totalRevenue: answers[7] || '0',
+        totalRevenue: surveyData.find(item => item.questionId === 7)?.answer || '0',
         costPerLead: (results.costPerLead || 0).toFixed(2),
         costPerAppointment: (results.costPerAppointment || 0).toFixed(2),
         costPerShow: (results.costPerShow || 0).toFixed(2),
