@@ -467,37 +467,37 @@ function calculateResults(surveyData) {
         let result;
         switch (calc.name) {
             case "totalRevenue":
-                result = calc.formula(answers[6]);
+                result = calc.formula(answers[7]);
                 break;
             case "averageSaleValue":
-                result = calc.formula(answers[6], answers[5]);
+                result = calc.formula(answers[7], answers[6]);
                 break;
             case "roas":
-                result = calc.formula(answers[6], answers[1]);
+                result = calc.formula(answers[7], answers[2]);
                 break;
             case "costPerLead":
-                result = calc.formula(answers[1], answers[2]);
+                result = calc.formula(answers[2], answers[3]);
                 break;
             case "costPerAppointment":
-                result = calc.formula(answers[1], answers[3]);
+                result = calc.formula(answers[2], answers[4]);
                 break;
             case "costPerShow":
-                result = calc.formula(answers[1], answers[4]);
+                result = calc.formula(answers[2], answers[5]);
                 break;
             case "costPerSale":
-                result = calc.formula(answers[1], answers[5]);
+                result = calc.formula(answers[2], answers[6]);
                 break;
             case "leadToAppointmentConversion":
-                result = calc.formula(answers[3], answers[2]);
-                break;
-            case "appointmentToShowConversion":
                 result = calc.formula(answers[4], answers[3]);
                 break;
-            case "showToSaleConversion":
+            case "appointmentToShowConversion":
                 result = calc.formula(answers[5], answers[4]);
                 break;
+            case "showToSaleConversion":
+                result = calc.formula(answers[6], answers[5]);
+                break;
         }
-        results[calc.name] = isNaN(result) || !isFinite(result) ? 0 : result;
+        results[calc.name] = isNaN(result) || !isFinite(result) ? 0 : parseFloat(result.toFixed(2));
     });
 
     return results;
