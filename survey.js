@@ -353,15 +353,15 @@ function submitSurvey() {
     const results = calculateResults(surveyData);
     console.log('Calculated results:', results);
 
-    let resultMessage = "Roofer's Calculator Results:\n\n";
-    resultMessage += `Cost per Lead: $${results.costPerLead.toFixed(2)}\n`;
-    resultMessage += `Cost per Appointment: $${results.costPerAppointment.toFixed(2)}\n`;
-    resultMessage += `Cost per Show: $${results.costPerShow.toFixed(2)}\n`;
-    resultMessage += `Cost per Sale: $${results.costPerSale.toFixed(2)}\n\n`;
-    resultMessage += `Lead to Appointment Conversion: ${results.leadToAppointmentConversion.toFixed(2)}%\n`;
-    resultMessage += `Appointment to Show Conversion: ${results.appointmentToShowConversion.toFixed(2)}%\n`;
-    resultMessage += `Show to Sale Conversion: ${results.showToSaleConversion.toFixed(2)}%`;
+    const queryParams = new URLSearchParams({
+        costPerLead: results.costPerLead.toFixed(2),
+        costPerAppointment: results.costPerAppointment.toFixed(2),
+        costPerShow: results.costPerShow.toFixed(2),
+        costPerSale: results.costPerSale.toFixed(2),
+        leadToAppointmentConversion: results.leadToAppointmentConversion.toFixed(2),
+        appointmentToShowConversion: results.appointmentToShowConversion.toFixed(2),
+        showToSaleConversion: results.showToSaleConversion.toFixed(2)
+    });
 
-    alert(resultMessage);
-    // Here you would typically send the data to a server
+    window.location.href = `thankyou.html?${queryParams.toString()}`;
 }
