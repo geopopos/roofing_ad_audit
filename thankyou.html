@@ -53,7 +53,10 @@
                     title: 'Sales',
                     items: [
                         { label: 'Number of Sales', value: params.get('numberOfSales') },
-                        { label: 'Cost per Sale', value: `$${params.get('costPerSale')}` }
+                        { label: 'Cost per Sale', value: `$${params.get('costPerSale')}` },
+                        { label: 'Total Revenue', value: `$${params.get('totalRevenue')}` },
+                        { label: 'Average Sale Value', value: `$${params.get('averageSaleValue')}` },
+                        { label: 'ROAS (Return on Ad Spend)', value: `${params.get('roas')}x` }
                     ]
                 }
             ];

@@ -1,5 +1,17 @@
 const calculations = [
     {
+        name: "totalRevenue",
+        formula: (totalRevenue) => totalRevenue
+    },
+    {
+        name: "averageSaleValue",
+        formula: (totalRevenue, numberOfSales) => totalRevenue / numberOfSales
+    },
+    {
+        name: "roas",
+        formula: (totalRevenue, totalMarketingCost) => totalRevenue / totalMarketingCost
+    },
+    {
         name: "costPerLead",
         formula: (totalMarketingCost, numberOfLeads) => totalMarketingCost / numberOfLeads
     },
@@ -83,6 +95,17 @@ const questions = [
         validation: true,
         regex: "^\\d+$",
         validationMessage: "Please enter a valid whole number.",
+        required: true
+    },
+    {
+        id: 6,
+        text: "What is your total revenue generated?",
+        type: "number",
+        placeholder: "Enter total revenue",
+        min: 0,
+        validation: true,
+        regex: "^\\d+(\\.\\d{1,2})?$",
+        validationMessage: "Please enter a valid number with up to 2 decimal places.",
         required: true
     }
 ];
@@ -359,13 +382,16 @@ function submitSurvey() {
         numberOfAppointments: answers[3],
         numberOfShows: answers[4],
         numberOfSales: answers[5],
+        totalRevenue: answers[6],
         costPerLead: results.costPerLead.toFixed(2),
         costPerAppointment: results.costPerAppointment.toFixed(2),
         costPerShow: results.costPerShow.toFixed(2),
         costPerSale: results.costPerSale.toFixed(2),
         leadToAppointmentConversion: results.leadToAppointmentConversion.toFixed(2),
         appointmentToShowConversion: results.appointmentToShowConversion.toFixed(2),
-        showToSaleConversion: results.showToSaleConversion.toFixed(2)
+        showToSaleConversion: results.showToSaleConversion.toFixed(2),
+        averageSaleValue: results.averageSaleValue.toFixed(2),
+        roas: results.roas.toFixed(2)
     });
 
     window.location.href = `thankyou.html?${queryParams.toString()}`;
