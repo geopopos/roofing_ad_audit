@@ -514,7 +514,7 @@ nextBtn.addEventListener('click', () => {
 renderQuestion(currentQuestionIndex);
 
 // Initialize Google Places Autocomplete
-google.maps.event.addDomListener(window, 'load', initAutocomplete);
+window.addEventListener('load', initAutocomplete);
 
 // Initialize Google Places Autocomplete
 google.maps.event.addDomListener(window, 'load', initAutocomplete);
