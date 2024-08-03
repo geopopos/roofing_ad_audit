@@ -41,6 +41,8 @@ const calculations = [
     }
 ];
 
+let autocomplete;
+
 const questions = [
     {
         id: 1,
@@ -48,7 +50,6 @@ const questions = [
         type: "text",
         placeholder: "Enter your city",
         validation: true,
-        regex: "^[a-zA-Z\\s-]+$",
         validationMessage: "Please enter a valid city name.",
         required: true
     },
@@ -127,12 +128,34 @@ const questionContainer = document.getElementById('question-container');
 const prevBtn = document.getElementById('prev-btn');
 const nextBtn = document.getElementById('next-btn');
 
+function initAutocomplete() {
+    const input = document.getElementById('q1');
+    autocomplete = new google.maps.places.Autocomplete(input, {
+        types: ['(cities)'],
+        fields: ['place_id', 'geometry', 'name']
+    });
+    autocomplete.addListener('place_changed', onPlaceChanged);
+}
+
+function onPlaceChanged() {
+    const place = autocomplete.getPlace();
+    if (!place.geometry) {
+        document.getElementById('q1').placeholder = 'Enter a city';
+    } else {
+        answers[1] = place.name;
+    }
+}
+
 function renderQuestion(index) {
     console.log('Rendering question:', index);
     const question = questions[index];
     let html = `<h2 class="text-xl font-semibold mb-4">${question.text}</h2>`;
     
     clearError();
+
+    if (index === 0) {
+        html += `<input type="text" id="q${question.id}" class="w-full p-2 border rounded" placeholder="${question.placeholder}" autofocus>`;
+    } else {
 
     switch (question.type) {
         case 'text':
@@ -298,7 +321,15 @@ function moveToNextQuestion() {
         }
     }
 
-    if (currentQuestion.validation && ['text', 'number', 'tel', 'email'].includes(currentQuestion.type)) {
+    if (currentQuestion.id === 1) {
+        // City validation
+        const place = autocomplete.getPlace();
+        if (!place || !place.geometry) {
+            showError('Please select a valid city from the suggestions.');
+            return;
+        }
+        answers[currentQuestion.id] = place.name;
+    } else if (currentQuestion.validation && ['text', 'number', 'tel', 'email'].includes(currentQuestion.type)) {
         const regex = new RegExp(currentQuestion.regex);
         if (!regex.test(input.value)) {
             input.classList.add('border-red-500');
@@ -308,7 +339,7 @@ function moveToNextQuestion() {
     }
 
     // Update answers for text, number, tel, and email inputs
-    if (['text', 'number', 'tel', 'email'].includes(currentQuestion.type)) {
+    if (['text', 'number', 'tel', 'email'].includes(currentQuestion.type) && currentQuestion.id !== 1) {
         answers[currentQuestion.id] = input.value.trim();
     }
 
@@ -336,6 +367,9 @@ nextBtn.addEventListener('click', () => {
 
 // Initialize the first question
 renderQuestion(currentQuestionIndex);
+
+// Initialize Google Places Autocomplete
+google.maps.event.addDomListener(window, 'load', initAutocomplete);
 
 function calculateResults(surveyData) {
     let results = {};
