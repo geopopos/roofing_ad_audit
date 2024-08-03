@@ -199,7 +199,8 @@ function updateButtons() {
 function moveToNextQuestion() {
     const currentQuestion = questions[currentQuestionIndex];
     const input = document.getElementById(`q${currentQuestion.id}`);
-    console.log("current question required:", currentQuestion.required);
+    console.log("Current question:", currentQuestion);
+    console.log("Current question required:", currentQuestion.required);
 
     if (currentQuestion.required) {
         if (currentQuestion.type === 'checkbox') {
