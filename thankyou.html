@@ -18,37 +18,58 @@
             const params = new URLSearchParams(window.location.search);
             const resultsDiv = document.getElementById('results');
 
-            const results = {
-                'Your Input': {
-                    'Total Marketing Cost': `$${params.get('totalMarketingCost')}`,
-                    'Number of Leads': params.get('numberOfLeads'),
-                    'Number of Appointments': params.get('numberOfAppointments'),
-                    'Number of Shows': params.get('numberOfShows'),
-                    'Number of Sales': params.get('numberOfSales')
+            const results = [
+                {
+                    title: 'Leads',
+                    items: [
+                        { label: 'Number of Leads', value: params.get('numberOfLeads') },
+                        { label: 'Cost per Lead', value: `$${params.get('costPerLead')}` },
+                        { label: 'Lead to Appointment Conversion', value: `${params.get('leadToAppointmentConversion')}%` }
+                    ]
                 },
-                'Calculated Results': {
-                    'Cost per Lead': `$${params.get('costPerLead')}`,
-                    'Cost per Appointment': `$${params.get('costPerAppointment')}`,
-                    'Cost per Show': `$${params.get('costPerShow')}`,
-                    'Cost per Sale': `$${params.get('costPerSale')}`,
-                    'Lead to Appointment Conversion': `${params.get('leadToAppointmentConversion')}%`,
-                    'Appointment to Show Conversion': `${params.get('appointmentToShowConversion')}%`,
-                    'Show to Sale Conversion': `${params.get('showToSaleConversion')}%`
+                {
+                    title: 'Appointments',
+                    items: [
+                        { label: 'Number of Appointments', value: params.get('numberOfAppointments') },
+                        { label: 'Cost per Appointment', value: `$${params.get('costPerAppointment')}` },
+                        { label: 'Appointment to Show Conversion', value: `${params.get('appointmentToShowConversion')}%` }
+                    ]
+                },
+                {
+                    title: 'Shows',
+                    items: [
+                        { label: 'Number of Shows', value: params.get('numberOfShows') },
+                        { label: 'Cost per Show', value: `$${params.get('costPerShow')}` },
+                        { label: 'Show to Sale Conversion', value: `${params.get('showToSaleConversion')}%` }
+                    ]
+                },
+                {
+                    title: 'Sales',
+                    items: [
+                        { label: 'Number of Sales', value: params.get('numberOfSales') },
+                        { label: 'Cost per Sale', value: `$${params.get('costPerSale')}` }
+                    ]
+                },
+                {
+                    title: 'Total Marketing Cost',
+                    items: [
+                        { label: 'Total Marketing Cost', value: `$${params.get('totalMarketingCost')}` }
+                    ]
                 }
-            };
+            ];
 
-            for (const [section, sectionData] of Object.entries(results)) {
+            results.forEach(section => {
                 const h3 = document.createElement('h3');
-                h3.textContent = section;
+                h3.textContent = section.title;
                 h3.className = 'text-lg font-semibold mt-4 mb-2';
                 resultsDiv.appendChild(h3);
 
-                for (const [key, value] of Object.entries(sectionData)) {
+                section.items.forEach(item => {
                     const p = document.createElement('p');
-                    p.innerHTML = `<strong>${key}:</strong> ${value}`;
+                    p.innerHTML = `<strong>${item.label}:</strong> ${item.value}`;
                     resultsDiv.appendChild(p);
-                }
-            }
+                });
+            });
         });
     </script>
 </body>
