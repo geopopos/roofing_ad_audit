@@ -1,3 +1,36 @@
+const calculations = [
+    {
+        name: "averageAge",
+        questionId: 1,
+        type: "average",
+        valueType: "number"
+    },
+    {
+        name: "satisfactionScore",
+        questionId: 2,
+        type: "average",
+        valueType: "map",
+        valueMap: {
+            "Very Satisfied": 5,
+            "Satisfied": 4,
+            "Neutral": 3,
+            "Dissatisfied": 2,
+            "Very Dissatisfied": 1
+        }
+    },
+    {
+        name: "mostRequestedFeature",
+        questionId: 3,
+        type: "mostFrequent"
+    },
+    {
+        name: "averageUsage",
+        questionId: 4,
+        type: "average",
+        valueType: "number"
+    }
+];
+
 const questions = [
     {
         id: 1,
@@ -279,49 +312,36 @@ nextBtn.addEventListener('click', () => {
 renderQuestion(currentQuestionIndex);
 
 function calculateResults(surveyData) {
-    let results = {
-        averageAge: 0,
-        satisfactionScore: 0,
-        mostRequestedFeature: '',
-        averageUsage: 0
-    };
+    let results = {};
 
-    let ageSum = 0;
-    let usageSum = 0;
-    let satisfactionCount = 0;
-    let featureCounts = {};
+    calculations.forEach(calc => {
+        const relevantData = surveyData.filter(item => item.questionId === calc.questionId);
 
-    surveyData.forEach(item => {
-        switch(item.questionId) {
-            case 1: // Age
-                ageSum += parseInt(item.answer);
+        switch (calc.type) {
+            case "average":
+                if (calc.valueType === "number") {
+                    const sum = relevantData.reduce((acc, item) => acc + parseFloat(item.answer), 0);
+                    results[calc.name] = sum / relevantData.length;
+                } else if (calc.valueType === "map") {
+                    const sum = relevantData.reduce((acc, item) => acc + calc.valueMap[item.answer], 0);
+                    results[calc.name] = sum / relevantData.length;
+                }
                 break;
-            case 2: // Satisfaction
-                const satisfactionMap = {
-                    "Very Satisfied": 5,
-                    "Satisfied": 4,
-                    "Neutral": 3,
-                    "Dissatisfied": 2,
-                    "Very Dissatisfied": 1
-                };
-                results.satisfactionScore += satisfactionMap[item.answer];
-                satisfactionCount++;
-                break;
-            case 3: // Features to improve
-                item.answer.forEach(feature => {
-                    featureCounts[feature] = (featureCounts[feature] || 0) + 1;
+            case "mostFrequent":
+                const counts = {};
+                relevantData.forEach(item => {
+                    if (Array.isArray(item.answer)) {
+                        item.answer.forEach(ans => {
+                            counts[ans] = (counts[ans] || 0) + 1;
+                        });
+                    } else {
+                        counts[item.answer] = (counts[item.answer] || 0) + 1;
+                    }
                 });
-                break;
-            case 4: // Usage in past month
-                usageSum += parseInt(item.answer);
+                results[calc.name] = Object.entries(counts).sort((a, b) => b[1] - a[1])[0][0];
                 break;
         }
     });
-
-    results.averageAge = ageSum / surveyData.filter(item => item.questionId === 1).length;
-    results.satisfactionScore = results.satisfactionScore / satisfactionCount;
-    results.mostRequestedFeature = Object.entries(featureCounts).sort((a, b) => b[1] - a[1])[0][0];
-    results.averageUsage = usageSum / surveyData.filter(item => item.questionId === 4).length;
 
     return results;
 }
@@ -338,13 +358,14 @@ function submitSurvey() {
     const results = calculateResults(surveyData);
     console.log('Calculated results:', results);
 
-    let resultMessage = `
-Survey Results:
-- Average Age: ${results.averageAge.toFixed(1)} years
-- Satisfaction Score: ${results.satisfactionScore.toFixed(2)} out of 5
-- Most Requested Feature to Improve: ${results.mostRequestedFeature}
-- Average Usage in Past Month: ${results.averageUsage.toFixed(1)} times
-    `;
+    let resultMessage = "Survey Results:\n";
+    calculations.forEach(calc => {
+        let value = results[calc.name];
+        if (typeof value === 'number') {
+            value = value.toFixed(2);
+        }
+        resultMessage += `- ${calc.name}: ${value}\n`;
+    });
 
     alert('Survey completed! Thank you for your responses.\n\n' + resultMessage);
     // Here you would typically send the data to a server
