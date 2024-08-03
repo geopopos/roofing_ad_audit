@@ -18,6 +18,32 @@
             const params = new URLSearchParams(window.location.search);
             const resultsDiv = document.getElementById('results');
 
+            // Function to determine color based on value compared to average
+            function getColorClass(value, average, isHigherBetter = false) {
+                const ratio = value / average;
+                if (isHigherBetter) {
+                    if (ratio > 1.1) return 'text-green-600';
+                    if (ratio < 0.9) return 'text-red-600';
+                } else {
+                    if (ratio < 0.9) return 'text-green-600';
+                    if (ratio > 1.1) return 'text-red-600';
+                }
+                return 'text-black';
+            }
+
+            // Define average values (you may want to replace these with actual industry averages)
+            const averages = {
+                costPerLead: 50,
+                costPerAppointment: 100,
+                costPerShow: 150,
+                costPerSale: 500,
+                leadToAppointmentConversion: 50,
+                appointmentToShowConversion: 75,
+                showToSaleConversion: 25,
+                averageSaleValue: 10000,
+                roas: 5
+            };
+
             const results = [
                 {
                     title: 'Total Marketing Cost',
@@ -29,34 +55,34 @@
                     title: 'Leads',
                     items: [
                         { label: 'Number of Leads', value: parseInt(params.get('numberOfLeads')).toLocaleString('en-US') },
-                        { label: 'Cost per Lead', value: `$${parseFloat(params.get('costPerLead')).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}` },
-                        { label: 'Lead to Appointment Conversion', value: `${parseFloat(params.get('leadToAppointmentConversion')).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}%` }
+                        { label: 'Cost per Lead', value: `$${parseFloat(params.get('costPerLead')).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`, compare: 'costPerLead' },
+                        { label: 'Lead to Appointment Conversion', value: `${parseFloat(params.get('leadToAppointmentConversion')).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}%`, compare: 'leadToAppointmentConversion', higherIsBetter: true }
                     ]
                 },
                 {
                     title: 'Appointments',
                     items: [
                         { label: 'Number of Appointments', value: parseInt(params.get('numberOfAppointments')).toLocaleString('en-US') },
-                        { label: 'Cost per Appointment', value: `$${parseFloat(params.get('costPerAppointment')).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}` },
-                        { label: 'Appointment to Show Conversion', value: `${parseFloat(params.get('appointmentToShowConversion')).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}%` }
+                        { label: 'Cost per Appointment', value: `$${parseFloat(params.get('costPerAppointment')).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`, compare: 'costPerAppointment' },
+                        { label: 'Appointment to Show Conversion', value: `${parseFloat(params.get('appointmentToShowConversion')).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}%`, compare: 'appointmentToShowConversion', higherIsBetter: true }
                     ]
                 },
                 {
                     title: 'Shows',
                     items: [
                         { label: 'Number of Shows', value: parseInt(params.get('numberOfShows')).toLocaleString('en-US') },
-                        { label: 'Cost per Show', value: `$${parseFloat(params.get('costPerShow')).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}` },
-                        { label: 'Show to Sale Conversion', value: `${parseFloat(params.get('showToSaleConversion')).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}%` }
+                        { label: 'Cost per Show', value: `$${parseFloat(params.get('costPerShow')).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`, compare: 'costPerShow' },
+                        { label: 'Show to Sale Conversion', value: `${parseFloat(params.get('showToSaleConversion')).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}%`, compare: 'showToSaleConversion', higherIsBetter: true }
                     ]
                 },
                 {
                     title: 'Sales',
                     items: [
                         { label: 'Number of Sales', value: parseInt(params.get('numberOfSales')).toLocaleString('en-US') },
-                        { label: 'Cost per Sale', value: `$${parseFloat(params.get('costPerSale')).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}` },
+                        { label: 'Cost per Sale', value: `$${parseFloat(params.get('costPerSale')).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`, compare: 'costPerSale' },
                         { label: 'Total Revenue', value: `$${parseFloat(params.get('totalRevenue')).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}` },
-                        { label: 'Average Sale Value', value: `$${parseFloat(params.get('averageSaleValue')).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}` },
-                        { label: 'ROAS (Return on Ad Spend)', value: `${parseFloat(params.get('roas')).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}x` }
+                        { label: 'Average Sale Value', value: `$${parseFloat(params.get('averageSaleValue')).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`, compare: 'averageSaleValue', higherIsBetter: true },
+                        { label: 'ROAS (Return on Ad Spend)', value: `${parseFloat(params.get('roas')).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}x`, compare: 'roas', higherIsBetter: true }
                     ]
                 }
             ];
@@ -69,7 +95,12 @@
 
                 section.items.forEach(item => {
                     const p = document.createElement('p');
-                    p.innerHTML = `<strong>${item.label}:</strong> ${item.value}`;
+                    let colorClass = 'text-black';
+                    if (item.compare) {
+                        const value = parseFloat(params.get(item.compare));
+                        colorClass = getColorClass(value, averages[item.compare], item.higherIsBetter);
+                    }
+                    p.innerHTML = `<strong>${item.label}:</strong> <span class="${colorClass}">${item.value}</span>`;
                     resultsDiv.appendChild(p);
                 });
             });
