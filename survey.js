@@ -469,4 +469,3 @@ function submitSurvey() {
 
     window.location.href = `thankyou.html?${queryParams.toString()}`;
 }
-}
