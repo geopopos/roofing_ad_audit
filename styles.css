@@ -15,3 +15,8 @@
 .fade-in {
     opacity: 1;
 }
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Your custom styles here */
