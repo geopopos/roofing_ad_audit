@@ -20,6 +20,7 @@ const questions = [
 ];
 
 let currentQuestionIndex = 0;
+let answers = {};
 
 const questionContainer = document.getElementById('question-container');
 const prevBtn = document.getElementById('prev-btn');
@@ -74,6 +75,7 @@ function renderQuestion(index) {
                 button.classList.remove('bg-gray-200', 'text-gray-800');
                 button.classList.add('bg-blue-500', 'text-white');
                 
+                answers[question.id] = button.dataset.value;
                 moveToNextQuestion();
             });
         });
@@ -90,6 +92,15 @@ function renderQuestion(index) {
                 button.classList.toggle('text-white');
                 button.classList.toggle('bg-gray-200');
                 button.classList.toggle('text-gray-800');
+                
+                if (!answers[question.id]) {
+                    answers[question.id] = [];
+                }
+                if (button.classList.contains('bg-blue-500')) {
+                    answers[question.id].push(button.dataset.value);
+                } else {
+                    answers[question.id] = answers[question.id].filter(value => value !== button.dataset.value);
+                }
             });
         });
     }
@@ -97,6 +108,9 @@ function renderQuestion(index) {
     // Add event listener for text input
     if (question.type === 'text') {
         const textInput = document.getElementById(`q${question.id}`);
+        textInput.addEventListener('input', (event) => {
+            answers[question.id] = event.target.value;
+        });
         textInput.addEventListener('keypress', (event) => {
             if (event.key === 'Enter') {
                 event.preventDefault();
@@ -148,17 +162,7 @@ renderQuestion(currentQuestionIndex);
 function submitSurvey() {
     console.log('Survey submission');
     const surveyData = questions.map(question => {
-        let answer;
-        if (question.type === 'text') {
-            const textInput = document.getElementById(`q${question.id}`);
-            answer = textInput ? textInput.value : null;
-        } else if (question.type === 'radio') {
-            const selectedButton = document.querySelector(`#question-container .radio-btn.bg-blue-500[data-value]`);
-            answer = selectedButton ? selectedButton.dataset.value : null;
-        } else if (question.type === 'checkbox') {
-            answer = Array.from(document.querySelectorAll(`#question-container .checkbox-btn.bg-blue-500`))
-                .map(button => button.dataset.value);
-        }
+        const answer = answers[question.id];
         console.log(`Question ${question.id} answer:`, answer);
         return { questionId: question.id, answer: answer };
     });
