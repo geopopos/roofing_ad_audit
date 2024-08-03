@@ -252,6 +252,17 @@ function initAutocomplete() {
     }
 }
 
+function checkGoogleMapsLoaded() {
+    if (window.google && window.google.maps) {
+        initAutocomplete();
+    } else {
+        setTimeout(checkGoogleMapsLoaded, 100);
+    }
+}
+
+// Call this function when the page loads
+window.addEventListener('load', checkGoogleMapsLoaded);
+
 function renderQuestion(index) {
     console.log('Rendering question:', index);
     const question = questions[index];
