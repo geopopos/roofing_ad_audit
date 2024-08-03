@@ -44,35 +44,38 @@ const calculations = [
 let autocomplete;
 
 function formatCurrency(input) {
-    // Store the current cursor position
-    const cursorPos = input.selectionStart;
-    
-    // Remove all non-digit characters except for the last decimal point
+    // Store the current cursor position and selection
+    const start = input.selectionStart;
+    const end = input.selectionEnd;
+    const length = input.value.length;
+
+    // Remove non-digit characters except the last decimal point
     let value = input.value.replace(/[^\d.]/g, '').replace(/\.(?=.*\.)/g, '');
-    
+
     // Ensure only two decimal places
     let parts = value.split('.');
     if (parts.length > 1) {
         parts[1] = parts[1].slice(0, 2);
         value = parts.join('.');
     }
-    
-    // Format the number with commas and two decimal places
-    const formattedValue = parseFloat(value || 0).toLocaleString('en-US', {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-    });
-    
-    // Calculate the difference in length between the old and new values
-    const lengthDiff = formattedValue.length - input.value.length;
-    
+
+    // Add commas for thousands
+    value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+    // Add dollar sign and ensure two decimal places
+    if (value !== '') {
+        if (!value.includes('.')) value += '.00';
+        else if (value.split('.')[1].length === 1) value += '0';
+        value = '$' + value;
+    }
+
     // Update the input value
-    input.value = formattedValue;
-    
+    input.value = value;
+
     // Adjust the cursor position
-    input.setSelectionRange(cursorPos + lengthDiff, cursorPos + lengthDiff);
+    const newLength = input.value.length;
+    const cursorAdjust = newLength - length;
+    input.setSelectionRange(start + cursorAdjust, end + cursorAdjust);
 }
 
 const questions = [
@@ -324,10 +327,10 @@ function renderQuestion(index) {
             if (question.format) {
                 question.format(input);
             }
-            answers[question.id] = event.target.value;
+            answers[question.id] = input.value;
             if (question.validation) {
                 const regex = new RegExp(question.regex);
-                if (regex.test(event.target.value)) {
+                if (regex.test(input.value.replace(/[,$]/g, ''))) {
                     input.classList.remove('border-red-500');
                     input.classList.add('border-green-500');
                 } else {
