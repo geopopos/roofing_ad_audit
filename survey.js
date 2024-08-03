@@ -361,7 +361,6 @@ function renderQuestion(index) {
         questionContainer.classList.remove('fade-out');
         questionContainer.classList.add('fade-in');
     }, 50);
-    }
 }, 300); // This timeout should match the transition duration in CSS
 }
 
