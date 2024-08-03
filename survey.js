@@ -382,11 +382,10 @@ function clearError() {
 
 function updateProgress(index) {
     const progressBar = document.getElementById('progress-bar');
-    const progressText = document.getElementById('progress-text');
     const progress = ((index + 1) / questions.length) * 100;
     
     progressBar.style.width = `${progress}%`;
-    progressText.textContent = `Question ${index + 1} of ${questions.length}`;
+    progressBar.textContent = `${Math.round(progress)}%`;
 }
 
 function moveToNextQuestion() {
