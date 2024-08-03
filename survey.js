@@ -174,12 +174,7 @@ function renderQuestion(index) {
     if (index === 0) {
         html += `<input type="text" id="q${question.id}" class="w-full p-2 border rounded" placeholder="${question.placeholder}" autofocus>`;
     } else {
-
-    if (index === 0) {
-        html += `<input type="text" id="q${question.id}" class="w-full p-2 border rounded" placeholder="${question.placeholder}" autofocus>`;
-    } else {
-
-    switch (question.type) {
+        switch (question.type) {
         case 'text':
         case 'number':
         case 'tel':
@@ -476,4 +471,5 @@ function submitSurvey() {
     });
 
     window.location.href = `thankyou.html?${queryParams.toString()}`;
+}
 }
