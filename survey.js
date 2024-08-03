@@ -41,8 +41,6 @@ const calculations = [
     }
 ];
 
-let autocomplete;
-
 function formatCurrency(input) {
     // Store the current cursor position and selection
     const start = input.selectionStart;
@@ -205,53 +203,10 @@ const questions = [
 
 let currentQuestionIndex = 0;
 let answers = {};
-let googleMapsLoaded = false;
 
 const questionContainer = document.getElementById('question-container');
 const prevBtn = document.getElementById('prev-btn');
 const nextBtn = document.getElementById('next-btn');
-
-function initMap() {
-    googleMapsLoaded = true;
-    if (currentQuestionIndex === 0) {
-        initAutocomplete();
-    }
-}
-
-function initAutocomplete() {
-    if (!googleMapsLoaded) return;
-
-    const input = document.getElementById('q1');
-    if (input) {
-        try {
-            autocomplete = new google.maps.places.Autocomplete(input, {
-                types: ['(cities)'],
-                fields: ['place_id', 'geometry', 'name']
-            });
-            autocomplete.addListener('place_changed', onPlaceChanged);
-        } catch (error) {
-            console.error('Error initializing Google Places Autocomplete:', error);
-            showError('Unable to initialize city search. Please enter your city manually.');
-        }
-    }
-}
-
-function onPlaceChanged() {
-    const place = autocomplete.getPlace();
-    const input = document.getElementById('q1');
-    if (!place.geometry) {
-        input.placeholder = 'Enter a city';
-        input.classList.add('border-red-500');
-        answers[1] = null;
-        showError('Please select a valid city from the suggestions.');
-    } else {
-        answers[1] = place.name;
-        input.value = place.name;
-        input.classList.remove('border-red-500');
-        input.classList.add('border-green-500');
-        clearError();
-    }
-}
 
 function renderQuestion(index) {
     console.log('Rendering question:', index);
@@ -279,10 +234,6 @@ function renderQuestion(index) {
 
         questionContainer.innerHTML = html;
 
-        // Initialize Google Places Autocomplete for the city question
-        if (question.id === 1) {
-            initAutocomplete();
-        }
 
         // ... (rest of the function)
     }, 300);
@@ -524,18 +475,7 @@ function moveToNextQuestion() {
         }
     }
 
-    if (currentQuestion.id === 1) {
-        // City validation
-        if (!answers[currentQuestion.id]) {
-            if (googleMapsLoaded) {
-                showError('Please select a valid city from the suggestions.');
-            } else {
-                // If Google Maps failed to load, allow manual entry
-                answers[currentQuestion.id] = input.value.trim();
-            }
-            return;
-        }
-    } else if (currentQuestion.validation && ['text', 'number', 'tel', 'email'].includes(currentQuestion.type)) {
+    if (currentQuestion.validation && ['text', 'number', 'tel', 'email'].includes(currentQuestion.type)) {
         const regex = new RegExp(currentQuestion.regex);
         if (!regex.test(input.value)) {
             input.classList.add('border-red-500');
@@ -574,10 +514,6 @@ nextBtn.addEventListener('click', () => {
 // Initialize the first question
 renderQuestion(currentQuestionIndex);
 
-// Initialize Google Places Autocomplete
-function initMap() {
-    initAutocomplete();
-}
 
 
 function calculateResults(surveyData) {
