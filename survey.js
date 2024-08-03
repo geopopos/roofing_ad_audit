@@ -2,8 +2,10 @@ const questions = [
     {
         id: 1,
         text: "What is your age?",
-        type: "text",
-        placeholder: "Enter your age"
+        type: "number",
+        placeholder: "Enter your age",
+        min: 0,
+        max: 120
     },
     {
         id: 2,
@@ -16,6 +18,14 @@ const questions = [
         text: "What features would you like to see improved? (Select all that apply)",
         type: "checkbox",
         options: ["User Interface", "Performance", "Customer Support", "Documentation", "Pricing"]
+    },
+    {
+        id: 4,
+        text: "How many times have you used our service in the past month?",
+        type: "number",
+        placeholder: "Enter a number",
+        min: 0,
+        max: 100
     }
 ];
 
@@ -34,6 +44,9 @@ function renderQuestion(index) {
     switch (question.type) {
         case 'text':
             html += `<input type="text" id="q${question.id}" class="w-full p-2 border rounded" placeholder="${question.placeholder}" autofocus>`;
+            break;
+        case 'number':
+            html += `<input type="number" id="q${question.id}" class="w-full p-2 border rounded" placeholder="${question.placeholder}" min="${question.min}" max="${question.max}" autofocus>`;
             break;
         case 'radio':
             html += `<div class="grid grid-cols-2 gap-2">`;
@@ -105,13 +118,13 @@ function renderQuestion(index) {
         });
     }
 
-    // Add event listener for text input
-    if (question.type === 'text') {
-        const textInput = document.getElementById(`q${question.id}`);
-        textInput.addEventListener('input', (event) => {
+    // Add event listener for text and number inputs
+    if (question.type === 'text' || question.type === 'number') {
+        const input = document.getElementById(`q${question.id}`);
+        input.addEventListener('input', (event) => {
             answers[question.id] = event.target.value;
         });
-        textInput.addEventListener('keypress', (event) => {
+        input.addEventListener('keypress', (event) => {
             if (event.key === 'Enter') {
                 event.preventDefault();
                 moveToNextQuestion();
