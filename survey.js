@@ -64,7 +64,11 @@ function renderQuestion(index) {
         radioButtons.forEach(button => {
             button.addEventListener('click', () => {
                 console.log('Radio button clicked:', button.dataset.value);
-                radioButtons.forEach(btn => btn.classList.remove('bg-blue-500', 'text-white'));
+                radioButtons.forEach(btn => {
+                    btn.classList.remove('bg-blue-500', 'text-white');
+                    btn.classList.add('bg-gray-200', 'text-gray-800');
+                });
+                button.classList.remove('bg-gray-200', 'text-gray-800');
                 button.classList.add('bg-blue-500', 'text-white');
             });
         });
