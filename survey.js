@@ -243,7 +243,7 @@ function moveToNextQuestion() {
         const regex = new RegExp(currentQuestion.regex);
         if (!regex.test(input.value)) {
             input.classList.add('border-red-500');
-            showError('Please enter a valid response.');
+            showError(currentQuestion.validationMessage || 'Please enter a valid response.');
             return; // Don't move to the next question if validation fails
         }
     }
