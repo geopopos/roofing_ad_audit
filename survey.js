@@ -254,12 +254,7 @@ prevBtn.addEventListener('click', () => {
 
 nextBtn.addEventListener('click', () => {
     console.log('Next button clicked');
-    if (currentQuestionIndex < questions.length - 1) {
-        currentQuestionIndex++;
-        renderQuestion(currentQuestionIndex);
-    } else {
-        submitSurvey();
-    }
+    moveToNextQuestion();
 });
 
 // Initialize the first question
