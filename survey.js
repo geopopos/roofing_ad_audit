@@ -34,13 +34,14 @@ function renderQuestion(index) {
             html += `<input type="text" id="q${question.id}" class="w-full p-2 border rounded" placeholder="${question.placeholder}">`;
             break;
         case 'radio':
+            html += `<div class="flex flex-wrap gap-2">`;
             question.options.forEach(option => {
                 html += `
-                <div class="mb-2">
-                    <input type="radio" id="${option}" name="q${question.id}" value="${option}">
-                    <label for="${option}">${option}</label>
-                </div>`;
+                <button type="button" class="radio-btn bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded" data-value="${option}">
+                    ${option}
+                </button>`;
             });
+            html += `</div>`;
             break;
         case 'checkbox':
             question.options.forEach(option => {
@@ -51,6 +52,19 @@ function renderQuestion(index) {
                 </div>`;
             });
             break;
+    }
+
+    questionContainer.innerHTML = html;
+
+    // Add event listeners for radio buttons
+    if (question.type === 'radio') {
+        const radioButtons = questionContainer.querySelectorAll('.radio-btn');
+        radioButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                radioButtons.forEach(btn => btn.classList.remove('bg-blue-500', 'text-white'));
+                button.classList.add('bg-blue-500', 'text-white');
+            });
+        });
     }
 
     questionContainer.innerHTML = html;
@@ -75,6 +89,20 @@ nextBtn.addEventListener('click', () => {
         renderQuestion(currentQuestionIndex);
     } else {
         // Handle survey submission
+        const surveyData = questions.map(question => {
+            let answer;
+            if (question.type === 'text') {
+                answer = document.getElementById(`q${question.id}`).value;
+            } else if (question.type === 'radio') {
+                const selectedButton = document.querySelector('.radio-btn.bg-blue-500');
+                answer = selectedButton ? selectedButton.dataset.value : null;
+            } else if (question.type === 'checkbox') {
+                answer = Array.from(document.querySelectorAll(`input[name="q${question.id}"]:checked`))
+                    .map(checkbox => checkbox.value);
+            }
+            return { questionId: question.id, answer: answer };
+        });
+        console.log('Survey responses:', surveyData);
         alert('Survey completed! Thank you for your responses.');
         // Here you would typically send the data to a server
     }
