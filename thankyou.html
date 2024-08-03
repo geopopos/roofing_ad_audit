@@ -8,10 +8,10 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="bg-gray-100 min-h-screen flex items-center justify-center">
-    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h1 class="text-2xl font-bold mb-6 text-center">Thank You!</h1>
-        <h2 class="text-xl font-semibold mb-4">Roofer's Calculator Results:</h2>
-        <div id="results" class="space-y-2"></div>
+    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-2xl">
+        <h1 class="text-3xl font-bold mb-6 text-center text-blue-600">Thank You!</h1>
+        <h2 class="text-2xl font-semibold mb-4 text-gray-700">Roofer's Calculator Results:</h2>
+        <div id="results" class="space-y-4"></div>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -88,21 +88,36 @@
             ];
 
             results.forEach(section => {
+                const sectionDiv = document.createElement('div');
+                sectionDiv.className = 'bg-gray-50 p-4 rounded-lg mb-4';
+
                 const h3 = document.createElement('h3');
                 h3.textContent = section.title;
-                h3.className = 'text-lg font-semibold mt-4 mb-2';
-                resultsDiv.appendChild(h3);
+                h3.className = 'text-xl font-semibold mb-3 text-blue-700';
+                sectionDiv.appendChild(h3);
+
+                const grid = document.createElement('div');
+                grid.className = 'grid grid-cols-1 md:grid-cols-2 gap-3';
 
                 section.items.forEach(item => {
-                    const p = document.createElement('p');
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'bg-white p-3 rounded shadow';
+
                     let colorClass = 'text-black';
                     if (item.compare) {
                         const value = parseFloat(params.get(item.compare));
                         colorClass = getColorClass(value, averages[item.compare], item.higherIsBetter);
                     }
-                    p.innerHTML = `<strong>${item.label}:</strong> <span class="${colorClass}">${item.value}</span>`;
-                    resultsDiv.appendChild(p);
+
+                    itemDiv.innerHTML = `
+                        <div class="text-sm font-medium text-gray-500">${item.label}</div>
+                        <div class="text-lg font-bold ${colorClass}">${item.value}</div>
+                    `;
+                    grid.appendChild(itemDiv);
                 });
+
+                sectionDiv.appendChild(grid);
+                resultsDiv.appendChild(sectionDiv);
             });
         });
     </script>
