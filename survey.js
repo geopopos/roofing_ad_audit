@@ -43,8 +43,6 @@ const calculations = [
 
 let autocomplete;
 
-let autocomplete;
-
 const questions = [
     {
         id: 1,
