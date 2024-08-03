@@ -55,7 +55,7 @@ const questions = [
     },
     {
         id: 2,
-        text: "What is your total marketing cost?",
+        text: "What is your total marketing cost? (Just a guess is fine)",
         type: "number",
         placeholder: "Enter total marketing cost",
         min: 0,
@@ -130,23 +130,23 @@ const questions = [
         required: true
     },
     {
-        id: 9,
-        text: "What is your phone number?",
-        type: "tel",
-        placeholder: "Enter your phone number",
-        validation: true,
-        regex: "^\\+?[1-9]\\d{1,14}$",
-        validationMessage: "Please enter a valid phone number.",
-        required: true
-    },
-    {
         id: 10,
-        text: "What is your email address?",
+        text: "What is your email address? (This will be used to send you your instant audit)",
         type: "email",
         placeholder: "Enter your email address",
         validation: true,
         regex: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
         validationMessage: "Please enter a valid email address.",
+        required: true
+    },
+    {
+        id: 9,
+        text: "What is your phone number? (This will be used to send you your instant audit)",
+        type: "tel",
+        placeholder: "Enter your phone number",
+        validation: true,
+        regex: "^\\+?[1-9]\\d{1,14}$",
+        validationMessage: "Please enter a valid phone number.",
         required: true
     }
 ];
