@@ -247,6 +247,41 @@ function renderQuestion(index) {
         updateProgress(index);
 
         switch (question.type) {
+            case 'text':
+            case 'number':
+            case 'tel':
+            case 'email':
+                html += `<input type="${question.type}" id="q${question.id}" class="w-full p-2 border rounded" placeholder="${question.placeholder}" ${question.min !== undefined ? `min="${question.min}"` : ''} ${question.max !== undefined ? `max="${question.max}"` : ''} ${question.validation ? `pattern="${question.regex}"` : ''} autofocus>`;
+                break;
+            // ... (rest of the switch case)
+        }
+
+        questionContainer.innerHTML = html;
+
+        // Initialize Google Places Autocomplete for the city question
+        if (question.id === 1) {
+            initAutocomplete();
+        }
+
+        // ... (rest of the function)
+    }, 300);
+}
+
+function renderQuestion(index) {
+    console.log('Rendering question:', index);
+    const question = questions[index];
+    let html = `<h2 class="text-xl font-semibold mb-4">${question.text}</h2>`;
+    
+    clearError();
+
+    // Fade out the current question
+    questionContainer.classList.add('fade-out');
+
+    setTimeout(() => {
+        // Update progress bar
+        updateProgress(index);
+
+        switch (question.type) {
         case 'text':
         case 'number':
         case 'tel':
