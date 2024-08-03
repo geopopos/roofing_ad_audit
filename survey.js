@@ -153,10 +153,10 @@ function submitSurvey() {
             const textInput = document.getElementById(`q${question.id}`);
             answer = textInput ? textInput.value : null;
         } else if (question.type === 'radio') {
-            const selectedButton = document.querySelector('.radio-btn.bg-blue-500');
+            const selectedButton = document.querySelector(`#question-container .radio-btn.bg-blue-500[data-value]`);
             answer = selectedButton ? selectedButton.dataset.value : null;
         } else if (question.type === 'checkbox') {
-            answer = Array.from(document.querySelectorAll(`.checkbox-btn.bg-blue-500`))
+            answer = Array.from(document.querySelectorAll(`#question-container .checkbox-btn.bg-blue-500`))
                 .map(button => button.dataset.value);
         }
         console.log(`Question ${question.id} answer:`, answer);
