@@ -20,6 +20,12 @@
 
             const results = [
                 {
+                    title: 'Total Marketing Cost',
+                    items: [
+                        { label: 'Total Marketing Cost', value: `$${params.get('totalMarketingCost')}` }
+                    ]
+                },
+                {
                     title: 'Leads',
                     items: [
                         { label: 'Number of Leads', value: params.get('numberOfLeads') },
@@ -48,12 +54,6 @@
                     items: [
                         { label: 'Number of Sales', value: params.get('numberOfSales') },
                         { label: 'Cost per Sale', value: `$${params.get('costPerSale')}` }
-                    ]
-                },
-                {
-                    title: 'Total Marketing Cost',
-                    items: [
-                        { label: 'Total Marketing Cost', value: `$${params.get('totalMarketingCost')}` }
                     ]
                 }
             ];
