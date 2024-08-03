@@ -206,6 +206,11 @@ function moveToNextQuestion() {
                 alert('This question is required. Please select at least one option.');
                 return;
             }
+        } else if (['text', 'number', 'tel', 'email'].includes(currentQuestion.type)) {
+            if (!input.value.trim()) {
+                alert('This question is required. Please provide an answer.');
+                return;
+            }
         } else if (!answers[currentQuestion.id] || answers[currentQuestion.id] === '') {
             alert('This question is required. Please provide an answer.');
             return;
@@ -219,6 +224,11 @@ function moveToNextQuestion() {
             alert('Please enter a valid response.');
             return; // Don't move to the next question if validation fails
         }
+    }
+
+    // Update answers for text, number, tel, and email inputs
+    if (['text', 'number', 'tel', 'email'].includes(currentQuestion.type)) {
+        answers[currentQuestion.id] = input.value.trim();
     }
 
     setTimeout(() => {
