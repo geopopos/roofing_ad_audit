@@ -239,6 +239,19 @@ function renderQuestion(index) {
     }, 300);
 }
 
+function initAutocomplete() {
+    const input = document.getElementById('q1');
+    if (input) {
+        const autocomplete = new google.maps.places.Autocomplete(input, { types: ['(cities)'] });
+        autocomplete.addListener('place_changed', function() {
+            const place = autocomplete.getPlace();
+            if (place.name) {
+                answers[1] = place.name;
+            }
+        });
+    }
+}
+
 function renderQuestion(index) {
     console.log('Rendering question:', index);
     const question = questions[index];
