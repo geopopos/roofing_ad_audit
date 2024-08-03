@@ -26,6 +26,7 @@ const prevBtn = document.getElementById('prev-btn');
 const nextBtn = document.getElementById('next-btn');
 
 function renderQuestion(index) {
+    console.log('Rendering question:', index);
     const question = questions[index];
     let html = `<h2 class="text-xl font-semibold mb-4">${question.text}</h2>`;
 
@@ -58,9 +59,11 @@ function renderQuestion(index) {
 
     // Add event listeners for radio buttons
     if (question.type === 'radio') {
+        console.log('Adding event listeners for radio buttons');
         const radioButtons = questionContainer.querySelectorAll('.radio-btn');
         radioButtons.forEach(button => {
             button.addEventListener('click', () => {
+                console.log('Radio button clicked:', button.dataset.value);
                 radioButtons.forEach(btn => btn.classList.remove('bg-blue-500', 'text-white'));
                 button.classList.add('bg-blue-500', 'text-white');
             });
@@ -75,6 +78,7 @@ function updateButtons() {
 }
 
 prevBtn.addEventListener('click', () => {
+    console.log('Previous button clicked');
     if (currentQuestionIndex > 0) {
         currentQuestionIndex--;
         renderQuestion(currentQuestionIndex);
@@ -82,10 +86,12 @@ prevBtn.addEventListener('click', () => {
 });
 
 nextBtn.addEventListener('click', () => {
+    console.log('Next button clicked');
     if (currentQuestionIndex < questions.length - 1) {
         currentQuestionIndex++;
         renderQuestion(currentQuestionIndex);
     } else {
+        console.log('Survey submission');
         // Handle survey submission
         const surveyData = questions.map(question => {
             let answer;
@@ -98,6 +104,7 @@ nextBtn.addEventListener('click', () => {
                 answer = Array.from(document.querySelectorAll(`input[name="q${question.id}"]:checked`))
                     .map(checkbox => checkbox.value);
             }
+            console.log(`Question ${question.id} answer:`, answer);
             return { questionId: question.id, answer: answer };
         });
         console.log('Survey responses:', surveyData);
