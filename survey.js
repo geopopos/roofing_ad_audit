@@ -205,8 +205,10 @@ function onPlaceChanged() {
     const place = autocomplete.getPlace();
     if (!place.geometry) {
         document.getElementById('q1').placeholder = 'Enter a city';
+        answers[1] = null;
     } else {
         answers[1] = place.name;
+        document.getElementById('q1').value = place.name;
     }
 }
 
@@ -431,12 +433,10 @@ function moveToNextQuestion() {
 
     if (currentQuestion.id === 1) {
         // City validation
-        const place = autocomplete.getPlace();
-        if (!place || !place.geometry) {
+        if (!answers[currentQuestion.id]) {
             showError('Please select a valid city from the suggestions.');
             return;
         }
-        answers[currentQuestion.id] = place.name;
     } else if (currentQuestion.validation && ['text', 'number', 'tel', 'email'].includes(currentQuestion.type)) {
         const regex = new RegExp(currentQuestion.regex);
         if (!regex.test(input.value)) {
