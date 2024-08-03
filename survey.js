@@ -150,7 +150,8 @@ function submitSurvey() {
     const surveyData = questions.map(question => {
         let answer;
         if (question.type === 'text') {
-            answer = document.getElementById(`q${question.id}`).value;
+            const textInput = document.getElementById(`q${question.id}`);
+            answer = textInput ? textInput.value : null;
         } else if (question.type === 'radio') {
             const selectedButton = document.querySelector('.radio-btn.bg-blue-500');
             answer = selectedButton ? selectedButton.dataset.value : null;
