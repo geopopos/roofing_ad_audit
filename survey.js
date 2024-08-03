@@ -70,6 +70,17 @@ function renderQuestion(index) {
                 });
                 button.classList.remove('bg-gray-200', 'text-gray-800');
                 button.classList.add('bg-blue-500', 'text-white');
+                
+                // Move to the next question automatically
+                setTimeout(() => {
+                    if (currentQuestionIndex < questions.length - 1) {
+                        currentQuestionIndex++;
+                        renderQuestion(currentQuestionIndex);
+                    } else {
+                        // If it's the last question, trigger the submit action
+                        submitSurvey();
+                    }
+                }, 500); // Wait for 500ms before moving to the next question
             });
         });
     }
@@ -95,27 +106,30 @@ nextBtn.addEventListener('click', () => {
         currentQuestionIndex++;
         renderQuestion(currentQuestionIndex);
     } else {
-        console.log('Survey submission');
-        // Handle survey submission
-        const surveyData = questions.map(question => {
-            let answer;
-            if (question.type === 'text') {
-                answer = document.getElementById(`q${question.id}`).value;
-            } else if (question.type === 'radio') {
-                const selectedButton = document.querySelector('.radio-btn.bg-blue-500');
-                answer = selectedButton ? selectedButton.dataset.value : null;
-            } else if (question.type === 'checkbox') {
-                answer = Array.from(document.querySelectorAll(`input[name="q${question.id}"]:checked`))
-                    .map(checkbox => checkbox.value);
-            }
-            console.log(`Question ${question.id} answer:`, answer);
-            return { questionId: question.id, answer: answer };
-        });
-        console.log('Survey responses:', surveyData);
-        alert('Survey completed! Thank you for your responses.');
-        // Here you would typically send the data to a server
+        submitSurvey();
     }
 });
 
 // Initialize the first question
 renderQuestion(currentQuestionIndex);
+
+function submitSurvey() {
+    console.log('Survey submission');
+    const surveyData = questions.map(question => {
+        let answer;
+        if (question.type === 'text') {
+            answer = document.getElementById(`q${question.id}`).value;
+        } else if (question.type === 'radio') {
+            const selectedButton = document.querySelector('.radio-btn.bg-blue-500');
+            answer = selectedButton ? selectedButton.dataset.value : null;
+        } else if (question.type === 'checkbox') {
+            answer = Array.from(document.querySelectorAll(`input[name="q${question.id}"]:checked`))
+                .map(checkbox => checkbox.value);
+        }
+        console.log(`Question ${question.id} answer:`, answer);
+        return { questionId: question.id, answer: answer };
+    });
+    console.log('Survey responses:', surveyData);
+    alert('Survey completed! Thank you for your responses.');
+    // Here you would typically send the data to a server
+}
