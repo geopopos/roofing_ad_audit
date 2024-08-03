@@ -71,17 +71,19 @@ function renderQuestion(index) {
                 button.classList.remove('bg-gray-200', 'text-gray-800');
                 button.classList.add('bg-blue-500', 'text-white');
                 
-                // Move to the next question automatically
-                setTimeout(() => {
-                    if (currentQuestionIndex < questions.length - 1) {
-                        currentQuestionIndex++;
-                        renderQuestion(currentQuestionIndex);
-                    } else {
-                        // If it's the last question, trigger the submit action
-                        submitSurvey();
-                    }
-                }, 500); // Wait for 500ms before moving to the next question
+                moveToNextQuestion();
             });
+        });
+    }
+
+    // Add event listener for text input
+    if (question.type === 'text') {
+        const textInput = document.getElementById(`q${question.id}`);
+        textInput.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                moveToNextQuestion();
+            }
         });
     }
     updateButtons();
@@ -90,6 +92,18 @@ function renderQuestion(index) {
 function updateButtons() {
     prevBtn.classList.toggle('hidden', currentQuestionIndex === 0);
     nextBtn.textContent = currentQuestionIndex === questions.length - 1 ? 'Submit' : 'Next';
+}
+
+function moveToNextQuestion() {
+    setTimeout(() => {
+        if (currentQuestionIndex < questions.length - 1) {
+            currentQuestionIndex++;
+            renderQuestion(currentQuestionIndex);
+        } else {
+            // If it's the last question, trigger the submit action
+            submitSurvey();
+        }
+    }, 500); // Wait for 500ms before moving to the next question
 }
 
 prevBtn.addEventListener('click', () => {
