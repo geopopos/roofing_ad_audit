@@ -44,15 +44,24 @@ const calculations = [
 let autocomplete;
 
 function formatCurrency(input) {
-    // Remove non-digit characters
-    let value = input.value.replace(/[^\d.]/g, '');
+    // Remove all non-digit characters except for the last decimal point
+    let value = input.value.replace(/[^\d.]/g, '').replace(/\.(?=.*\.)/g, '');
+    
+    // Ensure only two decimal places
+    let parts = value.split('.');
+    if (parts.length > 1) {
+        parts[1] = parts[1].slice(0, 2);
+        value = parts.join('.');
+    }
+    
     // Format the number with commas and two decimal places
-    value = parseFloat(value).toLocaleString('en-US', {
+    value = parseFloat(value || 0).toLocaleString('en-US', {
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
     });
+    
     // Update the input value
     input.value = value;
 }
