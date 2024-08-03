@@ -205,7 +205,6 @@ const questions = [
 
 let currentQuestionIndex = 0;
 let answers = {};
-let autocomplete;
 let googleMapsLoaded = false;
 
 const questionContainer = document.getElementById('question-container');
