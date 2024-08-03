@@ -26,6 +26,18 @@ const questions = [
         placeholder: "Enter a number",
         min: 0,
         max: 100
+    },
+    {
+        id: 5,
+        text: "What is your phone number?",
+        type: "tel",
+        placeholder: "Enter your phone number"
+    },
+    {
+        id: 6,
+        text: "What is your email address?",
+        type: "email",
+        placeholder: "Enter your email address"
     }
 ];
 
@@ -47,6 +59,12 @@ function renderQuestion(index) {
             break;
         case 'number':
             html += `<input type="number" id="q${question.id}" class="w-full p-2 border rounded" placeholder="${question.placeholder}" min="${question.min}" max="${question.max}" autofocus>`;
+            break;
+        case 'tel':
+            html += `<input type="tel" id="q${question.id}" class="w-full p-2 border rounded" placeholder="${question.placeholder}" autofocus>`;
+            break;
+        case 'email':
+            html += `<input type="email" id="q${question.id}" class="w-full p-2 border rounded" placeholder="${question.placeholder}" autofocus>`;
             break;
         case 'radio':
             html += `<div class="grid grid-cols-2 gap-2">`;
@@ -118,8 +136,8 @@ function renderQuestion(index) {
         });
     }
 
-    // Add event listener for text and number inputs
-    if (question.type === 'text' || question.type === 'number') {
+    // Add event listener for text, number, tel, and email inputs
+    if (['text', 'number', 'tel', 'email'].includes(question.type)) {
         const input = document.getElementById(`q${question.id}`);
         input.addEventListener('input', (event) => {
             answers[question.id] = event.target.value;
