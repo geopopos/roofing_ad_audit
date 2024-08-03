@@ -68,6 +68,8 @@ function renderQuestion(index) {
     console.log('Rendering question:', index);
     const question = questions[index];
     let html = `<h2 class="text-xl font-semibold mb-4">${question.text}</h2>`;
+    
+    clearError();
 
     switch (question.type) {
         case 'text':
@@ -196,25 +198,39 @@ function updateButtons() {
     nextBtn.textContent = currentQuestionIndex === questions.length - 1 ? 'Submit' : 'Next';
 }
 
+function showError(message) {
+    const errorElement = document.getElementById('error-message');
+    errorElement.textContent = message;
+    errorElement.classList.remove('hidden');
+}
+
+function clearError() {
+    const errorElement = document.getElementById('error-message');
+    errorElement.textContent = '';
+    errorElement.classList.add('hidden');
+}
+
 function moveToNextQuestion() {
     const currentQuestion = questions[currentQuestionIndex];
     const input = document.getElementById(`q${currentQuestion.id}`);
     console.log("Current question:", currentQuestion);
     console.log("Current question required:", currentQuestion.required);
 
+    clearError();
+
     if (currentQuestion.required) {
         if (currentQuestion.type === 'checkbox') {
             if (!answers[currentQuestion.id] || answers[currentQuestion.id].length === 0) {
-                alert('This question is required. Please select at least one option.');
+                showError('This question is required. Please select at least one option.');
                 return;
             }
         } else if (['text', 'number', 'tel', 'email'].includes(currentQuestion.type)) {
             if (!input.value.trim()) {
-                alert('This question is required. Please provide an answer.');
+                showError('This question is required. Please provide an answer.');
                 return;
             }
         } else if (!answers[currentQuestion.id] || answers[currentQuestion.id] === '') {
-            alert('This question is required. Please provide an answer.');
+            showError('This question is required. Please provide an answer.');
             return;
         }
     }
@@ -223,7 +239,7 @@ function moveToNextQuestion() {
         const regex = new RegExp(currentQuestion.regex);
         if (!regex.test(input.value)) {
             input.classList.add('border-red-500');
-            alert('Please enter a valid response.');
+            showError('Please enter a valid response.');
             return; // Don't move to the next question if validation fails
         }
     }
@@ -233,15 +249,13 @@ function moveToNextQuestion() {
         answers[currentQuestion.id] = input.value.trim();
     }
 
-    setTimeout(() => {
-        if (currentQuestionIndex < questions.length - 1) {
-            currentQuestionIndex++;
-            renderQuestion(currentQuestionIndex);
-        } else {
-            // If it's the last question, trigger the submit action
-            submitSurvey();
-        }
-    }, 500); // Wait for 500ms before moving to the next question
+    if (currentQuestionIndex < questions.length - 1) {
+        currentQuestionIndex++;
+        renderQuestion(currentQuestionIndex);
+    } else {
+        // If it's the last question, trigger the submit action
+        submitSurvey();
+    }
 }
 
 prevBtn.addEventListener('click', () => {
