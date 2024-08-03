@@ -354,6 +354,11 @@ function submitSurvey() {
     console.log('Calculated results:', results);
 
     const queryParams = new URLSearchParams({
+        totalMarketingCost: answers[1],
+        numberOfLeads: answers[2],
+        numberOfAppointments: answers[3],
+        numberOfShows: answers[4],
+        numberOfSales: answers[5],
         costPerLead: results.costPerLead.toFixed(2),
         costPerAppointment: results.costPerAppointment.toFixed(2),
         costPerShow: results.costPerShow.toFixed(2),

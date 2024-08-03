@@ -19,19 +19,35 @@
             const resultsDiv = document.getElementById('results');
 
             const results = {
-                'Cost per Lead': `$${params.get('costPerLead')}`,
-                'Cost per Appointment': `$${params.get('costPerAppointment')}`,
-                'Cost per Show': `$${params.get('costPerShow')}`,
-                'Cost per Sale': `$${params.get('costPerSale')}`,
-                'Lead to Appointment Conversion': `${params.get('leadToAppointmentConversion')}%`,
-                'Appointment to Show Conversion': `${params.get('appointmentToShowConversion')}%`,
-                'Show to Sale Conversion': `${params.get('showToSaleConversion')}%`
+                'Your Input': {
+                    'Total Marketing Cost': `$${params.get('totalMarketingCost')}`,
+                    'Number of Leads': params.get('numberOfLeads'),
+                    'Number of Appointments': params.get('numberOfAppointments'),
+                    'Number of Shows': params.get('numberOfShows'),
+                    'Number of Sales': params.get('numberOfSales')
+                },
+                'Calculated Results': {
+                    'Cost per Lead': `$${params.get('costPerLead')}`,
+                    'Cost per Appointment': `$${params.get('costPerAppointment')}`,
+                    'Cost per Show': `$${params.get('costPerShow')}`,
+                    'Cost per Sale': `$${params.get('costPerSale')}`,
+                    'Lead to Appointment Conversion': `${params.get('leadToAppointmentConversion')}%`,
+                    'Appointment to Show Conversion': `${params.get('appointmentToShowConversion')}%`,
+                    'Show to Sale Conversion': `${params.get('showToSaleConversion')}%`
+                }
             };
 
-            for (const [key, value] of Object.entries(results)) {
-                const p = document.createElement('p');
-                p.innerHTML = `<strong>${key}:</strong> ${value}`;
-                resultsDiv.appendChild(p);
+            for (const [section, sectionData] of Object.entries(results)) {
+                const h3 = document.createElement('h3');
+                h3.textContent = section;
+                h3.className = 'text-lg font-semibold mt-4 mb-2';
+                resultsDiv.appendChild(h3);
+
+                for (const [key, value] of Object.entries(sectionData)) {
+                    const p = document.createElement('p');
+                    p.innerHTML = `<strong>${key}:</strong> ${value}`;
+                    resultsDiv.appendChild(p);
+                }
             }
         });
     </script>
