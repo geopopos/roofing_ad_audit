@@ -11,16 +11,14 @@
 <body class="bg-gray-100 min-h-screen flex items-center justify-center">
     <div id="survey-container" class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
         <h1 class="text-2xl font-bold mb-6 text-center">Roofer's Calculator</h1>
-        <div class="mb-4">
-            <div class="w-full bg-gray-200 rounded-full h-2.5">
-                <div id="progress-bar" class="bg-blue-600 h-2.5 rounded-full text-xs text-white text-center" style="width: 0%">0%</div>
-            </div>
-        </div>
         <div id="question-container" class="mb-6"></div>
         <div id="error-message" class="text-red-500 mb-4 hidden"></div>
-        <div class="flex justify-between">
+        <div class="flex justify-between mb-4">
             <button id="prev-btn" class="bg-gray-300 text-gray-700 px-4 py-2 rounded hidden">Previous</button>
             <button id="next-btn" class="bg-blue-500 text-white px-4 py-2 rounded">Next</button>
+        </div>
+        <div class="w-full bg-gray-200 rounded-full h-4">
+            <div id="progress-bar" class="bg-blue-600 h-4 rounded-full text-xs text-white text-center leading-4" style="width: 0%">0%</div>
         </div>
     </div>
     <script src="survey.js"></script>
