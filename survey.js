@@ -605,5 +605,15 @@ function submitSurvey() {
         email: answers[10] || ''
     });
 
-    window.location.href = `thankyou.html?${queryParams.toString()}`;
+    // Trigger confetti effect
+    confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+    });
+
+    // Delay redirect to show confetti
+    setTimeout(() => {
+        window.location.href = `thankyou.html?${queryParams.toString()}`;
+    }, 2000);
 }
