@@ -35,10 +35,11 @@ function renderQuestion(index) {
             html += `<input type="text" id="q${question.id}" class="w-full p-2 border rounded" placeholder="${question.placeholder}">`;
             break;
         case 'radio':
-            html += `<div class="flex flex-wrap gap-2">`;
-            question.options.forEach(option => {
+            html += `<div class="grid grid-cols-2 gap-2">`;
+            question.options.forEach((option, index) => {
+                const isLastOdd = index === question.options.length - 1 && question.options.length % 2 !== 0;
                 html += `
-                <button type="button" class="radio-btn bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded transition-colors duration-200" data-value="${option}">
+                <button type="button" class="radio-btn bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded transition-colors duration-200 ${isLastOdd ? 'col-span-2' : ''}" data-value="${option}">
                     ${option}
                 </button>`;
             });
