@@ -43,6 +43,8 @@ const calculations = [
 
 let autocomplete;
 
+let autocomplete;
+
 const questions = [
     {
         id: 1,
@@ -50,7 +52,7 @@ const questions = [
         type: "text",
         placeholder: "Enter your city",
         validation: true,
-        validationMessage: "Please enter a valid city name.",
+        validationMessage: "Please select a valid city from the suggestions.",
         required: true
     },
     {
@@ -146,12 +148,34 @@ function onPlaceChanged() {
     }
 }
 
+function initAutocomplete() {
+    const input = document.getElementById('q1');
+    autocomplete = new google.maps.places.Autocomplete(input, {
+        types: ['(cities)'],
+        fields: ['place_id', 'geometry', 'name']
+    });
+    autocomplete.addListener('place_changed', onPlaceChanged);
+}
+
+function onPlaceChanged() {
+    const place = autocomplete.getPlace();
+    if (!place.geometry) {
+        document.getElementById('q1').placeholder = 'Enter a city';
+    } else {
+        answers[1] = place.name;
+    }
+}
+
 function renderQuestion(index) {
     console.log('Rendering question:', index);
     const question = questions[index];
     let html = `<h2 class="text-xl font-semibold mb-4">${question.text}</h2>`;
     
     clearError();
+
+    if (index === 0) {
+        html += `<input type="text" id="q${question.id}" class="w-full p-2 border rounded" placeholder="${question.placeholder}" autofocus>`;
+    } else {
 
     if (index === 0) {
         html += `<input type="text" id="q${question.id}" class="w-full p-2 border rounded" placeholder="${question.placeholder}" autofocus>`;
@@ -367,6 +391,9 @@ nextBtn.addEventListener('click', () => {
 
 // Initialize the first question
 renderQuestion(currentQuestionIndex);
+
+// Initialize Google Places Autocomplete
+google.maps.event.addDomListener(window, 'load', initAutocomplete);
 
 // Initialize Google Places Autocomplete
 google.maps.event.addDomListener(window, 'load', initAutocomplete);
