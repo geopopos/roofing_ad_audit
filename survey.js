@@ -7,21 +7,24 @@ const questions = [
         min: 0,
         max: 120,
         validation: true,
-        regex: "^\\d{1,3}$"
+        regex: "^\\d{1,3}$",
+        required: true
     },
     {
         id: 2,
         text: "How satisfied are you with our service?",
         type: "radio",
         options: ["Very Satisfied", "Satisfied", "Neutral", "Dissatisfied", "Very Dissatisfied"],
-        validation: false
+        validation: false,
+        required: true
     },
     {
         id: 3,
         text: "What features would you like to see improved? (Select all that apply)",
         type: "checkbox",
         options: ["User Interface", "Performance", "Customer Support", "Documentation", "Pricing"],
-        validation: false
+        validation: false,
+        required: false
     },
     {
         id: 4,
@@ -31,7 +34,8 @@ const questions = [
         min: 0,
         max: 100,
         validation: true,
-        regex: "^\\d{1,3}$"
+        regex: "^\\d{1,3}$",
+        required: true
     },
     {
         id: 5,
@@ -39,7 +43,8 @@ const questions = [
         type: "tel",
         placeholder: "Enter your phone number",
         validation: true,
-        regex: "^\\+?\\d{10,14}$"
+        regex: "^\\+?\\d{10,14}$",
+        required: false
     },
     {
         id: 6,
@@ -47,7 +52,8 @@ const questions = [
         type: "email",
         placeholder: "Enter your email address",
         validation: true,
-        regex: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+        regex: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+        required: true
     }
 ];
 
@@ -111,7 +117,9 @@ function renderQuestion(index) {
                 button.classList.add('bg-blue-500', 'text-white');
                 
                 answers[question.id] = button.dataset.value;
-                moveToNextQuestion();
+                if (question.required) {
+                    moveToNextQuestion();
+                }
             });
         });
     }
@@ -135,6 +143,10 @@ function renderQuestion(index) {
                     answers[question.id].push(button.dataset.value);
                 } else {
                     answers[question.id] = answers[question.id].filter(value => value !== button.dataset.value);
+                }
+
+                if (question.required && answers[question.id].length === 0) {
+                    delete answers[question.id];
                 }
             });
         });
@@ -187,6 +199,11 @@ function updateButtons() {
 function moveToNextQuestion() {
     const currentQuestion = questions[currentQuestionIndex];
     const input = document.getElementById(`q${currentQuestion.id}`);
+
+    if (currentQuestion.required && !answers[currentQuestion.id]) {
+        alert('This question is required. Please provide an answer.');
+        return;
+    }
 
     if (currentQuestion.validation) {
         const regex = new RegExp(currentQuestion.regex);
