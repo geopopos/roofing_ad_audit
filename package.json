@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Roofer's Calculator",
   "scripts": {
-    "build": "tailwindcss -i styles.css -o dist/styles.css"
+    "build": "npx tailwindcss -i styles.css -o dist/styles.css"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.14",
