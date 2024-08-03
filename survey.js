@@ -106,7 +106,7 @@ const questions = [
     },
     {
         id: 3,
-        text: "What is your total marketing cost? (Just a guess is fine)",
+        text: "What is your total monthly marketing cost? (Just a guess is fine)",
         type: "text",
         placeholder: "Enter total marketing cost",
         min: 0,
@@ -118,7 +118,7 @@ const questions = [
     },
     {
         id: 4,
-        text: "How many leads did you generate?",
+        text: "How many leads do you generate on average?",
         type: "number",
         placeholder: "Enter number of leads",
         min: 0,
@@ -129,7 +129,7 @@ const questions = [
     },
     {
         id: 5,
-        text: "How many appointments were set?",
+        text: "How many appointments are set on average?",
         type: "number",
         placeholder: "Enter number of appointments",
         min: 0,
@@ -140,7 +140,7 @@ const questions = [
     },
     {
         id: 6,
-        text: "How many appointments showed up?",
+        text: "How many appointments showed up on average?",
         type: "number",
         placeholder: "Enter number of shows",
         min: 0,
@@ -151,7 +151,7 @@ const questions = [
     },
     {
         id: 7,
-        text: "How many sales did you close?",
+        text: "How many sales do you close on average?",
         type: "number",
         placeholder: "Enter number of sales",
         min: 0,
@@ -162,7 +162,7 @@ const questions = [
     },
     {
         id: 8,
-        text: "What is your total revenue generated?",
+        text: "What is your total revenue generated Per Month?",
         type: "number",
         placeholder: "Enter total revenue",
         min: 0,
