@@ -62,10 +62,8 @@ function formatCurrency(input) {
     // Add commas for thousands
     value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-    // Add dollar sign and ensure two decimal places
+    // Add dollar sign
     if (value !== '') {
-        if (!value.includes('.')) value += '.00';
-        else if (value.split('.')[1].length === 1) value += '0';
         value = '$' + value;
     }
 
