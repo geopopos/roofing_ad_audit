@@ -33,7 +33,7 @@ function renderQuestion(index) {
 
     switch (question.type) {
         case 'text':
-            html += `<input type="text" id="q${question.id}" class="w-full p-2 border rounded" placeholder="${question.placeholder}">`;
+            html += `<input type="text" id="q${question.id}" class="w-full p-2 border rounded" placeholder="${question.placeholder}" autofocus>`;
             break;
         case 'radio':
             html += `<div class="grid grid-cols-2 gap-2">`;
@@ -119,6 +119,17 @@ function renderQuestion(index) {
         });
     }
     updateButtons();
+    setFocusOnTextInput();
+}
+
+function setFocusOnTextInput() {
+    const currentQuestion = questions[currentQuestionIndex];
+    if (currentQuestion.type === 'text') {
+        const textInput = document.getElementById(`q${currentQuestion.id}`);
+        if (textInput) {
+            textInput.focus();
+        }
+    }
 }
 
 function updateButtons() {
