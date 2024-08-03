@@ -553,8 +553,6 @@ function initMap() {
     initAutocomplete();
 }
 
-// Initialize Google Places Autocomplete
-window.addEventListener('load', initAutocomplete);
 
 function calculateResults(surveyData) {
     let results = {};
