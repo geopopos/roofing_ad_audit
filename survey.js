@@ -74,6 +74,9 @@ function formatCurrency(input) {
     input.setSelectionRange(start + cursorAdjust, end + cursorAdjust);
 }
 
+// Define the redirect URL
+const redirectUrl = 'https://apply.thevolumeupagency.com/31-checkpoint-audit';
+
 const questions = [
     {
         id: 1,
@@ -643,6 +646,6 @@ function submitSurvey() {
 
     // Delay redirect to show confetti
     setTimeout(() => {
-        window.location.href = `thankyou.html?${queryParams.toString()}`;
+        window.location.href = `${redirectUrl}?${queryParams.toString()}`;
     }, 2000);
 }
