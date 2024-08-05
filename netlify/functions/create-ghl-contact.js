@@ -11,8 +11,8 @@ exports.handler = async (event, context) => {
   }
 
   try {
-    const { name, phone, email, companyName } = JSON.parse(event.body);
-    console.log('Received data:', { name, phone, email, companyName });
+    const { name, phone, email, companyName, city, state, country } = JSON.parse(event.body);
+    console.log('Received data:', { name, phone, email, companyName, city, state, country });
 
     // Validate required fields
     if (!name || !phone || !email) {
@@ -30,6 +30,9 @@ exports.handler = async (event, context) => {
       lastName,
       name,
       companyName,
+      city,
+      state,
+      country,
       source: 'Netlify Function'
     };
     console.log('Prepared contact data:', contactData);

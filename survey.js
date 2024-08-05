@@ -649,6 +649,12 @@ function submitSurvey() {
         email: answers[11] || ''
     });
 
+    // Extract city, state, and country from the city field
+    const cityParts = (answers[1] || '').split(',').map(part => part.trim());
+    const city = cityParts[0] || '';
+    const state = cityParts[1] || '';
+    const country = cityParts[2] || '';
+
     // Call the Netlify function to create a contact in Go High Level
     fetch('/.netlify/functions/create-ghl-contact', {
         method: 'POST',
@@ -659,7 +665,10 @@ function submitSurvey() {
             name: answers[9] || '',
             phone: answers[10] || '',
             email: answers[11] || '',
-            companyName: answers[12] || ''
+            companyName: answers[12] || '',
+            city: city,
+            state: state,
+            country: country
         }),
     })
     .then(response => response.json())
