@@ -668,6 +668,34 @@ function submitSurvey() {
     console.log(`City: ${city}, State: ${state}, Country: ${country}`);
 
     // Call the Netlify function to create a contact in Go High Level
+    console.log('Sending data to create-ghl-contact:', {
+        name: answers[9] || '',
+        phone: answers[10] || '',
+        email: answers[11] || '',
+        companyName: answers[12] || '',
+        city: city,
+        state: state,
+        country: country,
+        leadGenerationMethods: Array.isArray(answers[2]) ? answers[2].join(', ') : answers[2] || '',
+        totalMarketingCost: answers[3] || '',
+        numberOfLeads: answers[4] || '',
+        numberOfAppointments: answers[5] || '',
+        numberOfShows: answers[6] || '',
+        numberOfSales: answers[7] || '',
+        totalRevenue: answers[8] || '',
+        surveyResponses: {
+            city: answers[1] || '',
+            leadGenerationMethods: Array.isArray(answers[2]) ? answers[2].join(', ') : answers[2] || '',
+            totalMarketingCost: answers[3] || '',
+            numberOfLeads: answers[4] || '',
+            numberOfAppointments: answers[5] || '',
+            numberOfShows: answers[6] || '',
+            numberOfSales: answers[7] || '',
+            totalRevenue: answers[8] || ''
+        },
+        calculatedResults: results
+    });
+
     fetch('/.netlify/functions/create-ghl-contact', {
         method: 'POST',
         headers: {
