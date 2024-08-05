@@ -653,7 +653,7 @@ function submitSurvey() {
     const cityParts = (answers[1] || '').split(',').map(part => part.trim());
     const city = cityParts[0] || '';
     const state = cityParts[1] || '';
-    const country = cityParts[2] || '';
+    const country = cityParts[2] || cityParts[1] || ''; // Use the last part as country, defaulting to state if only two parts
 
     // Call the Netlify function to create a contact in Go High Level
     fetch('/.netlify/functions/create-ghl-contact', {
