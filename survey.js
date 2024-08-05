@@ -675,5 +675,5 @@ function submitSurvey() {
         }
         // if page is not embedded, we redirect directly
         window.location.href = `${redirectUrl}?${queryParams.toString()}`;
-    }, 2000);
+    }, 500);
 }
