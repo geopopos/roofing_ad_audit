@@ -40,7 +40,7 @@ exports.handler = async (event, context) => {
     const noteBody = `Name: ${name}\nPhone: ${phone}\nEmail: ${email}\nCompany: ${companyName}\nSource: ${contactData.source}`;
     
     await axios.post(`https://rest.gohighlevel.com/v1/contacts/${contactId}/notes/`, 
-      { body: noteBody },
+      { body: noteBody, userID: process.env.GHL_USER_ID  },
       {
         headers: {
           'Authorization': `Bearer ${process.env.GHL_LOCATION_API_KEY}`,
