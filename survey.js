@@ -436,9 +436,10 @@ function renderQuestion(index) {
                 }
             }
         });
+        // Set focus on the input field
+        setTimeout(() => input.focus(), 0);
     }
     updateButtons();
-    setFocusOnTextInput();
 
     // Fade in the new question
     setTimeout(() => {
@@ -448,15 +449,6 @@ function renderQuestion(index) {
 }, 300); // This timeout should match the transition duration in CSS
 }
 
-function setFocusOnTextInput() {
-    const currentQuestion = questions[currentQuestionIndex];
-    if (currentQuestion.type === 'text') {
-        const textInput = document.getElementById(`q${currentQuestion.id}`);
-        if (textInput) {
-            textInput.focus();
-        }
-    }
-}
 
 function updateButtons() {
     prevBtn.classList.toggle('hidden', currentQuestionIndex === 0);
