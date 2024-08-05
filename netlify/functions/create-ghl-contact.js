@@ -35,9 +35,23 @@ exports.handler = async (event, context) => {
       }
     });
 
+    // Create a note for the contact
+    const contactId = response.data.contact.id;
+    const noteBody = `Name: ${name}\nPhone: ${phone}\nEmail: ${email}\nCompany: ${companyName}\nSource: ${contactData.source}`;
+    
+    await axios.post(`https://rest.gohighlevel.com/v1/contacts/${contactId}/notes/`, 
+      { body: noteBody },
+      {
+        headers: {
+          'Authorization': `Bearer ${process.env.GHL_LOCATION_API_KEY}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
     return {
       statusCode: 200,
-      body: JSON.stringify({ message: 'Contact created successfully', data: response.data })
+      body: JSON.stringify({ message: 'Contact created successfully and note added', data: response.data })
     };
   } catch (error) {
     console.error('Error creating contact:', error);
