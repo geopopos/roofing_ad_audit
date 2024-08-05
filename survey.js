@@ -77,6 +77,8 @@ function formatCurrency(input) {
 // Define the redirect URL
 const redirectUrl = 'https://apply.thevolumeupagency.com/31-checkpoint-audit';
 
+
+
 const questions = [
     {
         id: 1,
@@ -646,6 +648,26 @@ function submitSurvey() {
 
     // Delay redirect to show confetti
     setTimeout(() => {
+        // Function to check if the page is embedded
+        function isPageEmbedded() {
+            // Using window.frameElement for same-origin iframes
+            if (window.frameElement) {
+                return true;
+            }
+            // Fallback method that might work across origins
+            try {
+                return window.self !== window.top;
+            } catch (e) {
+                return true; // Assume embedded if access is denied due to same-origin policy
+            }
+        }
+
+        // Example usage within the child page
+        if (isPageEmbedded()) {
+            // The page is embedded, so we set up the redirect mechanism
+            window.parent.postMessage({action: 'redirect', url: `${redirectUrl}?${queryParams.toString()}`}, '*');
+        }
+        // if page is not embedded, we redirect directly
         window.location.href = `${redirectUrl}?${queryParams.toString()}`;
     }, 2000);
 }
