@@ -105,10 +105,14 @@ const questions = [
             "Google Ads",
             "NextDoor Ads",
             "Yelp Ads",
+            "Tik Tok Ads",
             "News Paper",
             "Direct Mail",
             "Cold Calling",
             "DoorKnocking",
+            "TV",
+            "Radio",
+            "SEO",
             "Other"
         ],
         required: true
