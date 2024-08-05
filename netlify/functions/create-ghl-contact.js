@@ -48,7 +48,16 @@ exports.handler = async (event, context) => {
 
     // Create a note for the contact
     const contactId = response.data.contact.id;
-    const noteBody = `Name: ${name}\nPhone: ${phone}\nEmail: ${email}\nCompany: ${companyName}\nSource: ${contactData.source}`;
+    const noteBody = `
+Name: ${name}
+Phone: ${phone}
+Email: ${email}
+Company: ${companyName}
+City: ${city}
+State: ${state}
+Country: ${country}
+Source: ${contactData.source}
+    `.trim();
     
     console.log('Creating note for contact:', contactId);
     const noteResponse = await axios.post(`https://rest.gohighlevel.com/v1/contacts/${contactId}/notes/`, 
