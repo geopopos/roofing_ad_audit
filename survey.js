@@ -681,13 +681,23 @@ function submitSurvey() {
             city: city,
             state: state,
             country: country,
-            leadGenerationMethods: answers[2] ? answers[2].join(', ') : '',
+            leadGenerationMethods: Array.isArray(answers[2]) ? answers[2].join(', ') : answers[2] || '',
             totalMarketingCost: answers[3] || '',
             numberOfLeads: answers[4] || '',
             numberOfAppointments: answers[5] || '',
             numberOfShows: answers[6] || '',
             numberOfSales: answers[7] || '',
-            totalRevenue: answers[8] || ''
+            totalRevenue: answers[8] || '',
+            surveyResponses: {
+                city: answers[1] || '',
+                leadGenerationMethods: Array.isArray(answers[2]) ? answers[2].join(', ') : answers[2] || '',
+                totalMarketingCost: answers[3] || '',
+                numberOfLeads: answers[4] || '',
+                numberOfAppointments: answers[5] || '',
+                numberOfShows: answers[6] || '',
+                numberOfSales: answers[7] || '',
+                totalRevenue: answers[8] || ''
+            }
         }),
     })
     .then(response => response.json())
