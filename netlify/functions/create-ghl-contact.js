@@ -11,8 +11,8 @@ exports.handler = async (event, context) => {
   }
 
   try {
-    const { name, phone, email, companyName, city, state, country } = JSON.parse(event.body);
-    console.log('Received data:', { name, phone, email, companyName, city, state, country });
+    const { name, phone, email, companyName, city, state } = JSON.parse(event.body);
+    console.log('Received data:', { name, phone, email, companyName, city, state });
 
     // Validate required fields
     if (!name || !phone || !email) {
