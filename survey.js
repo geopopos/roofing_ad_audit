@@ -42,10 +42,8 @@ const calculations = [
 ];
 
 function formatCurrency(input) {
-    // Store the current cursor position and selection
-    const start = input.selectionStart;
-    const end = input.selectionEnd;
-    const length = input.value.length;
+    // Store the current cursor position
+    const cursorPos = input.selectionStart;
 
     // Remove non-digit characters except the last decimal point
     let value = input.value.replace(/[^\d.]/g, '').replace(/\.(?=.*\.)/g, '');
@@ -69,9 +67,8 @@ function formatCurrency(input) {
     input.value = value;
 
     // Adjust the cursor position
-    const newLength = input.value.length;
-    const cursorAdjust = newLength - length;
-    input.setSelectionRange(start + cursorAdjust, end + cursorAdjust);
+    const newCursorPos = cursorPos + (value.length - input.value.length);
+    input.setSelectionRange(newCursorPos, newCursorPos);
 }
 
 // Define the redirect URL
@@ -166,12 +163,11 @@ const questions = [
     {
         id: 8,
         text: "What is your total revenue generated Per Month?",
-        type: "number",
+        type: "text",
         placeholder: "Enter total revenue",
-        min: 0,
         validation: true,
-        regex: "^\\d+(\\.\\d{1,2})?$",
-        validationMessage: "Please enter a valid number with up to 2 decimal places.",
+        regex: "^\\$?\\d{1,3}(,\\d{3})*(\\.\\d{2})?$",
+        validationMessage: "Please enter a valid currency amount.",
         required: true,
         format: formatCurrency
     },
