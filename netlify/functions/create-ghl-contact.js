@@ -32,7 +32,7 @@ exports.handler = async (event, context) => {
       companyName,
       city,
       state,
-      country,
+      country: country || 'United States', // Set default country if not provided
       source: 'Netlify Function'
     };
     console.log('Prepared contact data:', contactData);
