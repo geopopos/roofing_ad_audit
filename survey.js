@@ -45,11 +45,17 @@ function formatCurrency(input) {
     // Store the current cursor position
     const cursorPos = input.selectionStart;
 
-    // Remove non-digit characters except the last decimal point
-    let value = input.value.replace(/[^\d.]/g, '').replace(/\.(?=.*\.)/g, '');
+    // Remove non-digit characters
+    let value = input.value.replace(/[^\d.]/g, '');
+
+    // Ensure only one decimal point
+    const decimalIndex = value.indexOf('.');
+    if (decimalIndex !== -1) {
+        value = value.slice(0, decimalIndex + 1) + value.slice(decimalIndex + 1).replace(/\./g, '');
+    }
 
     // Ensure only two decimal places
-    let parts = value.split('.');
+    const parts = value.split('.');
     if (parts.length > 1) {
         parts[1] = parts[1].slice(0, 2);
         value = parts.join('.');
@@ -63,11 +69,14 @@ function formatCurrency(input) {
         value = '$' + value;
     }
 
+    // Calculate new cursor position
+    const addedChars = value.length - input.value.length;
+    const newCursorPos = cursorPos + addedChars;
+
     // Update the input value
     input.value = value;
 
-    // Adjust the cursor position
-    const newCursorPos = cursorPos + (value.length - input.value.length);
+    // Set the cursor position
     input.setSelectionRange(newCursorPos, newCursorPos);
 }
 
