@@ -697,7 +697,8 @@ function submitSurvey() {
                 numberOfShows: answers[6] || '',
                 numberOfSales: answers[7] || '',
                 totalRevenue: answers[8] || ''
-            }
+            },
+            calculatedResults: results
         }),
     })
     .then(response => response.json())
