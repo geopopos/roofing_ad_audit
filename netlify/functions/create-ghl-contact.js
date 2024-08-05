@@ -30,8 +30,8 @@ exports.handler = async (event, context) => {
       lastName,
       name,
       companyName,
-      city,
-      state,
+      city: city || '',
+      state: state || '',
       country: country || 'United States', // Set default country if not provided
       source: 'Netlify Function'
     };
