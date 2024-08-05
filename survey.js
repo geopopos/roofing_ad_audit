@@ -668,7 +668,14 @@ function submitSurvey() {
             companyName: answers[12] || '',
             city: city,
             state: state,
-            country: country
+            country: country,
+            leadGenerationMethods: answers[2] ? answers[2].join(', ') : '',
+            totalMarketingCost: answers[3] || '',
+            numberOfLeads: answers[4] || '',
+            numberOfAppointments: answers[5] || '',
+            numberOfShows: answers[6] || '',
+            numberOfSales: answers[7] || '',
+            totalRevenue: answers[8] || ''
         }),
     })
     .then(response => response.json())

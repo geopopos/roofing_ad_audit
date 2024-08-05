@@ -57,6 +57,16 @@ City: ${city}
 State: ${state}
 Country: ${country}
 Source: ${contactData.source}
+
+Survey Responses:
+1. City: ${city}
+2. Lead Generation Methods: ${event.body.leadGenerationMethods || 'Not provided'}
+3. Total Monthly Marketing Cost: ${event.body.totalMarketingCost || 'Not provided'}
+4. Average Number of Leads: ${event.body.numberOfLeads || 'Not provided'}
+5. Average Number of Appointments Set: ${event.body.numberOfAppointments || 'Not provided'}
+6. Average Number of Appointments Showed Up: ${event.body.numberOfShows || 'Not provided'}
+7. Average Number of Sales Closed: ${event.body.numberOfSales || 'Not provided'}
+8. Total Revenue Generated Per Month: ${event.body.totalRevenue || 'Not provided'}
     `.trim();
     
     console.log('Creating note for contact:', contactId);
