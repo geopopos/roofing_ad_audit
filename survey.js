@@ -109,7 +109,7 @@ const questions = [
             "News Paper",
             "Direct Mail",
             "Cold Calling",
-            "DoorKnocking",
+            "Door Knocking",
             "TV",
             "Radio",
             "SEO",
