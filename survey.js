@@ -91,7 +91,7 @@ const questions = [
     },
     {
         id: 2,
-        text: "How do you currently generate roofing leads?",
+        text: "How do you currently generate roofing leads (select all that apply)?",
         type: "checkbox",
         options: [
             "Lead broker (Angi, Thumbtack, CraftJack, etc)",
@@ -172,7 +172,8 @@ const questions = [
         validation: true,
         regex: "^\\d+(\\.\\d{1,2})?$",
         validationMessage: "Please enter a valid number with up to 2 decimal places.",
-        required: true
+        required: true,
+        format: formatCurrency
     },
     {
         id: 9,
@@ -182,6 +183,14 @@ const questions = [
         validation: true,
         regex: "^[a-zA-Z ]+$",
         validationMessage: "Please enter a valid name (letters and spaces only).",
+        required: true
+    },
+    {
+        id: 12,
+        text: "What is your company name?",
+        type: "text",
+        placeholder: "Enter your company name",
+        validation: false,
         required: true
     },
     {
