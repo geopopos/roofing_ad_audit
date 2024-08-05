@@ -649,6 +649,27 @@ function submitSurvey() {
         email: answers[11] || ''
     });
 
+    // Call the Netlify function to create a contact in Go High Level
+    fetch('/.netlify/functions/create-ghl-contact', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            name: answers[9] || '',
+            phone: answers[10] || '',
+            email: answers[11] || '',
+            companyName: answers[12] || ''
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Contact created:', data);
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+
     // Trigger confetti effect
     confetti({
         particleCount: 100,
