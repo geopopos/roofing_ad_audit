@@ -268,23 +268,34 @@ function initAutocomplete() {
         const autocomplete = new google.maps.places.Autocomplete(input, { types: ['(cities)'] });
         autocomplete.addListener('place_changed', function() {
             const place = autocomplete.getPlace();
-            if (place.name) {
-                answers[1] = place.name;
+            if (place.address_components) {
+                let city = '', state = '', country = '';
+                for (const component of place.address_components) {
+                    if (component.types.includes('locality')) {
+                        city = component.long_name;
+                    } else if (component.types.includes('administrative_area_level_1')) {
+                        state = component.short_name;
+                    } else if (component.types.includes('country')) {
+                        country = component.long_name;
+                    }
+                }
+                answers[1] = `${city}, ${state}, ${country}`.trim();
+                input.value = answers[1];
             }
         });
     }
 }
 
-function checkGoogleMapsLoaded() {
-    if (window.google && window.google.maps) {
-        initAutocomplete();
-    } else {
-        setTimeout(checkGoogleMapsLoaded, 100);
-    }
+function loadGoogleMapsScript() {
+    const script = document.createElement('script');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyBBRsLUBwQWLvJIfZtySPCK2HHD75HNap8&libraries=places&callback=initAutocomplete`;
+    script.async = true;
+    script.defer = true;
+    document.head.appendChild(script);
 }
 
 // Call this function when the page loads
-window.addEventListener('load', checkGoogleMapsLoaded);
+window.addEventListener('load', loadGoogleMapsScript);
 
 function renderQuestion(index) {
     console.log('Rendering question:', index);
