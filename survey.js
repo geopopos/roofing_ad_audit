@@ -185,6 +185,16 @@ const questions = [
         format: formatCurrency
     },
     {
+        id: 13,
+        text: "Would you like to schedule a call to dive deeper into your audit and define action items to improve your results?",
+        type: "radio",
+        options: [
+            "Yes",
+            "No"
+        ],
+        required: true
+    },
+    {
         id: 9,
         text: "What is your name?",
         type: "text",
