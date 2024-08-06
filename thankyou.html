@@ -213,9 +213,9 @@
                                         `<span class="text-lg font-bold">${formattedValue}</span>`
                                     }
                                 </div>
-                                <span class="text-sm font-medium text-gray-500 original-value" data-item="${item.label}">${formattedValue}</span>
+                                <span class="text-sm font-medium text-gray-500 original-value" data-item="${item.label}"></span>
                             </div>
-                            <div class="text-sm text-gray-500 mt-1 initial-value hidden" data-item="${item.label}">Initial: ${formattedValue}</div>
+                            <div class="text-sm text-gray-500 mt-1 initial-value hidden" data-item="${item.label}"></div>
                             ${comparisonText}
                         `;
 
@@ -301,11 +301,11 @@
                             inputElement.value = formattedValue;
                         }
                         if (originalValueSpan && !originalValueSpan.dataset.originalSet) {
-                            originalValueSpan.textContent = formattedValue;
+                            originalValueSpan.textContent = item.value.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
                             originalValueSpan.dataset.originalSet = 'true';
                         }
                         if (initialValueDiv && !initialValueDiv.dataset.originalSet) {
-                            initialValueDiv.textContent = `Initial: ${formattedValue}`;
+                            initialValueDiv.textContent = `Initial: ${item.value.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
                             initialValueDiv.dataset.originalSet = 'true';
                         }
                     });
