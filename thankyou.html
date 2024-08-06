@@ -102,18 +102,6 @@
             };
 
             let currentValues = { ...originalValues };
-                totalMarketingCost: parseFloat(params.get('totalMarketingCost')),
-                numberOfLeads: parseInt(params.get('numberOfLeads')),
-                numberOfAppointments: parseInt(params.get('numberOfAppointments')),
-                numberOfShows: parseInt(params.get('numberOfShows')),
-                numberOfSales: parseInt(params.get('numberOfSales')),
-                totalRevenue: parseFloat(params.get('totalRevenue')),
-                costPerLead: parseFloat(params.get('costPerLead')),
-                leadToAppointmentConversion: parseFloat(params.get('leadToAppointmentConversion')),
-                appointmentToShowConversion: parseFloat(params.get('appointmentToShowConversion')),
-                showToSaleConversion: parseFloat(params.get('showToSaleConversion')),
-                averageSaleValue: parseFloat(params.get('averageSaleValue'))
-            };
 
             function calculateDerivedValues() {
                 currentValues.costPerAppointment = currentValues.totalMarketingCost / currentValues.numberOfAppointments;
