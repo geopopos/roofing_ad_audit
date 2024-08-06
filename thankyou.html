@@ -204,7 +204,12 @@
                                 <div class="flex items-center">
                                     <span class="w-3 h-3 rounded-full ${colorClass} mr-2"></span>
                                     ${item.editable ? 
-                                        `<input type="text" class="text-lg font-bold w-full" value="${formattedValue}" data-item="${item.label}">` :
+                                        `<div class="relative w-full">
+                                            <input type="text" class="text-lg font-bold w-full pr-8" value="${formattedValue}" data-item="${item.label}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                                <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                                            </svg>
+                                        </div>` :
                                         `<span class="text-lg font-bold">${formattedValue}</span>`
                                     }
                                 </div>
