@@ -283,6 +283,7 @@
                     section.items.forEach(item => {
                         const inputElement = document.querySelector(`input[data-item="${item.label}"]`);
                         const originalValueSpan = document.querySelector(`.original-value[data-item="${item.label}"]`);
+                        const initialValueDiv = document.querySelector(`.initial-value[data-item="${item.label}"]`);
                         if (inputElement) {
                             let formattedValue;
                             switch (item.format) {
@@ -302,6 +303,10 @@
                         if (originalValueSpan && !originalValueSpan.dataset.originalSet) {
                             originalValueSpan.textContent = formattedValue;
                             originalValueSpan.dataset.originalSet = 'true';
+                        }
+                        if (initialValueDiv && !initialValueDiv.dataset.originalSet) {
+                            initialValueDiv.textContent = `Initial: ${formattedValue}`;
+                            initialValueDiv.dataset.originalSet = 'true';
                         }
                     });
                 });
