@@ -230,17 +230,14 @@
                                         `<span class="text-lg font-bold">${formattedValue}</span>`
                                     }
                                 </div>
-                                <span class="text-sm font-medium text-gray-500 current-value" data-item="${item.label}"></span>
+                                <span class="text-sm font-medium text-gray-500"></span>
                             </div>
-                            <div class="text-sm text-gray-500 mt-1 original-value" data-item="${item.label}"></div>
                             ${comparisonText}
                         `;
 
                         if (item.editable) {
                             const input = itemDiv.querySelector('input');
                             const editIcon = itemDiv.querySelector('.edit-icon');
-                            const initialValueDiv = itemDiv.querySelector('.initial-value');
-                            
                             input.addEventListener('change', (e) => {
                                 let newValue = parseFloat(e.target.value.replace(/[^0-9.-]+/g,""));
                                 if (!isNaN(newValue)) {
@@ -283,17 +280,10 @@
                     section.items.forEach(item => {
                         const key = item.label.toLowerCase().replace(/ /g, '');
                         const inputElement = document.querySelector(`input[data-item="${item.label}"]`);
-                        const originalValueDiv = document.querySelector(`.original-value[data-item="${item.label}"]`);
                         const currentValueSpan = document.querySelector(`.current-value[data-item="${item.label}"]`);
-                        
                         if (inputElement && currentValues[key] !== undefined) {
                             let formattedValue = formatValue(currentValues[key], item.format);
                             inputElement.value = formattedValue;
-                        }
-                        
-                        if (originalValueDiv) {
-                            let originalValue = originalValues[key];
-                            originalValueDiv.textContent = `Original: ${formatValue(originalValue, item.format)}`;
                         }
                         
                         if (currentValueSpan) {
