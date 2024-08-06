@@ -82,7 +82,7 @@ function formatCurrency(input) {
 
 // Define the redirect URL
 const redirectUrl = 'https://apply.thevolumeupagency.com/31-checkpoint-audit';
-
+// const redirectUrl = 'thankyou.html';
 
 
 const questions = [
