@@ -87,7 +87,21 @@
                 roas: 10
             };
 
-            let currentValues = {
+            let originalValues = {
+                totalMarketingCost: parseFloat(params.get('totalMarketingCost')),
+                numberOfLeads: parseInt(params.get('numberOfLeads')),
+                numberOfAppointments: parseInt(params.get('numberOfAppointments')),
+                numberOfShows: parseInt(params.get('numberOfShows')),
+                numberOfSales: parseInt(params.get('numberOfSales')),
+                totalRevenue: parseFloat(params.get('totalRevenue')),
+                costPerLead: parseFloat(params.get('costPerLead')),
+                leadToAppointmentConversion: parseFloat(params.get('leadToAppointmentConversion')),
+                appointmentToShowConversion: parseFloat(params.get('appointmentToShowConversion')),
+                showToSaleConversion: parseFloat(params.get('showToSaleConversion')),
+                averageSaleValue: parseFloat(params.get('averageSaleValue'))
+            };
+
+            let currentValues = { ...originalValues };
                 totalMarketingCost: parseFloat(params.get('totalMarketingCost')),
                 numberOfLeads: parseInt(params.get('numberOfLeads')),
                 numberOfAppointments: parseInt(params.get('numberOfAppointments')),
@@ -240,6 +254,7 @@
                                 let newValue = parseFloat(e.target.value.replace(/[^0-9.-]+/g,""));
                                 if (!isNaN(newValue)) {
                                     const key = item.label.toLowerCase().replace(/ /g, '');
+                                    const originalValue = originalValues[key];
                                     currentValues[key] = newValue;
 
                                     // Recalculate all downstream values
@@ -257,9 +272,6 @@
                                     currentValues.costPerSale = currentValues.totalMarketingCost / currentValues.numberOfSales;
                                     currentValues.roas = currentValues.totalRevenue / currentValues.totalMarketingCost;
                                     
-                                    if (initialValueDiv) {
-                                        initialValueDiv.classList.remove('hidden');
-                                    }
                                     updateResults();
                                 }
                             });
@@ -289,21 +301,20 @@
                             inputElement.value = formattedValue;
                         }
                         
-                        if (originalValueDiv && !originalValueDiv.dataset.originalValue) {
-                            let originalValue = item.value;
+                        if (originalValueDiv) {
+                            let originalValue = originalValues[key];
                             originalValueDiv.textContent = `Original: ${formatValue(originalValue, item.format)}`;
-                            originalValueDiv.dataset.originalValue = originalValue;
                         }
                         
                         if (currentValueSpan) {
-                            let currentValue = currentValues[key] !== undefined ? currentValues[key] : item.value;
+                            let currentValue = currentValues[key];
                             currentValueSpan.textContent = `Current: ${formatValue(currentValue, item.format)}`;
                         }
 
                         if (!item.editable) {
                             const valueSpan = document.querySelector(`span.text-lg.font-bold[data-item="${item.label}"]`);
-                            if (valueSpan) {
-                                let displayValue = currentValues[key] !== undefined ? currentValues[key] : item.value;
+                            if (valueSpan && currentValues[key] !== undefined) {
+                                let displayValue = currentValues[key];
                                 valueSpan.textContent = formatValue(displayValue, item.format);
                             }
                         }
