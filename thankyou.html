@@ -239,41 +239,23 @@
                             input.addEventListener('change', (e) => {
                                 let newValue = parseFloat(e.target.value.replace(/[^0-9.-]+/g,""));
                                 if (!isNaN(newValue)) {
-                                    switch (item.label) {
-                                        case 'Total Marketing Cost':
-                                            currentValues.totalMarketingCost = newValue;
-                                            currentValues.numberOfLeads = Math.floor(currentValues.totalMarketingCost / currentValues.costPerLead);
-                                            break;
-                                        case 'Cost per Lead':
-                                            currentValues.costPerLead = newValue;
-                                            currentValues.numberOfLeads = Math.floor(currentValues.totalMarketingCost / newValue);
-                                            break;
-                                        case 'Lead to Appointment Conversion':
-                                            currentValues.leadToAppointmentConversion = newValue;
-                                            break;
-                                        case 'Appointment to Show Conversion':
-                                            currentValues.appointmentToShowConversion = newValue;
-                                            break;
-                                        case 'Show to Sale Conversion':
-                                            currentValues.showToSaleConversion = newValue;
-                                            break;
-                                        case 'Average Sale Value':
-                                            currentValues.averageSaleValue = newValue;
-                                            break;
-                                    }
-                                    
+                                    const key = item.label.toLowerCase().replace(/ /g, '');
+                                    currentValues[key] = newValue;
+
                                     // Recalculate all downstream values
-                                    currentValues.numberOfAppointments = Math.floor(currentValues.numberOfLeads * (currentValues.leadToAppointmentConversion / 100));
-                                    currentValues.numberOfShows = Math.floor(currentValues.numberOfAppointments * (currentValues.appointmentToShowConversion / 100));
-                                    currentValues.numberOfSales = Math.floor(currentValues.numberOfShows * (currentValues.showToSaleConversion / 100));
-                                    currentValues.totalRevenue = currentValues.numberOfSales * currentValues.averageSaleValue;
+                                    currentValues.numberOfAppointments = Math.floor(currentValues.numberOfLeads * (currentValues.leadtoappointmentconversion / 100));
+                                    currentValues.numberOfShows = Math.floor(currentValues.numberOfAppointments * (currentValues.appointmenttoshowconversion / 100));
+                                    currentValues.numberOfSales = Math.floor(currentValues.numberOfShows * (currentValues.showtosaleconversion / 100));
+                                    currentValues.totalRevenue = currentValues.numberOfSales * currentValues.averagesalevalue;
                                     
-                                    currentValues.costPerAppointment = currentValues.totalMarketingCost / currentValues.numberOfAppointments;
-                                    currentValues.costPerShow = currentValues.totalMarketingCost / currentValues.numberOfShows;
-                                    currentValues.costPerSale = currentValues.totalMarketingCost / currentValues.numberOfSales;
-                                    currentValues.roas = currentValues.totalRevenue / currentValues.totalMarketingCost;
+                                    currentValues.costperappointment = currentValues.totalmarketingcost / currentValues.numberOfAppointments;
+                                    currentValues.costpershow = currentValues.totalmarketingcost / currentValues.numberOfShows;
+                                    currentValues.costpersale = currentValues.totalmarketingcost / currentValues.numberOfSales;
+                                    currentValues.roas = currentValues.totalRevenue / currentValues.totalmarketingcost;
                                     
-                                    initialValueDiv.classList.remove('hidden');
+                                    if (initialValueDiv) {
+                                        initialValueDiv.classList.remove('hidden');
+                                    }
                                     updateResults();
                                 }
                             });
@@ -293,47 +275,38 @@
                 // Update all the values
                 results.forEach(section => {
                     section.items.forEach(item => {
+                        const key = item.label.toLowerCase().replace(/ /g, '');
                         const inputElement = document.querySelector(`input[data-item="${item.label}"]`);
                         const originalValueSpan = document.querySelector(`.original-value[data-item="${item.label}"]`);
                         const initialValueDiv = document.querySelector(`.initial-value[data-item="${item.label}"]`);
-                        if (inputElement) {
-                            let formattedValue;
-                            switch (item.format) {
-                                case 'currency':
-                                    formattedValue = `$${currentValues[item.label.toLowerCase().replace(/ /g, '')].toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-                                    break;
-                                case 'percent':
-                                    formattedValue = `${currentValues[item.label.toLowerCase().replace(/ /g, '')].toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}%`;
-                                    break;
-                                case 'number':
-                                default:
-                                    formattedValue = currentValues[item.label.toLowerCase().replace(/ /g, '')].toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-                                    break;
-                            }
-                            inputElement.value = formattedValue;
-                        }
                         const currentValueSpan = document.querySelector(`.current-value[data-item="${item.label}"]`);
                         const originalValueDiv = document.querySelector(`.original-value[data-item="${item.label}"]`);
                         
-                        // Set the original value as soon as the page loads
-                        let originalValue = item.value;
-                        originalValueDiv.textContent = `Original: ${formatValue(originalValue, item.format)}`;
-                        originalValueDiv.dataset.originalValue = originalValue;
+                        if (inputElement && currentValues[key] !== undefined) {
+                            let formattedValue = formatValue(currentValues[key], item.format);
+                            inputElement.value = formattedValue;
+                        }
                         
-                        // Always show the current value
-                        let currentValue = currentValues[item.label.toLowerCase().replace(/ /g, '')];
-                        if (currentValue !== undefined) {
-                            currentValueSpan.textContent = `Current: ${formatValue(currentValue, item.format)}`;
-                        } else {
-                            // If the current value is not in currentValues, use the item's value
-                            currentValueSpan.textContent = `Current: ${formatValue(item.value, item.format)}`;
+                        if (originalValueDiv) {
+                            let originalValue = item.value;
+                            originalValueDiv.textContent = `Original: ${formatValue(originalValue, item.format)}`;
+                            originalValueDiv.dataset.originalValue = originalValue;
+                        }
+                        
+                        if (currentValueSpan) {
+                            let currentValue = currentValues[key];
+                            if (currentValue !== undefined) {
+                                currentValueSpan.textContent = `Current: ${formatValue(currentValue, item.format)}`;
+                            } else {
+                                currentValueSpan.textContent = `Current: ${formatValue(item.value, item.format)}`;
+                            }
                         }
 
-                        // Update the displayed value for non-editable items
                         if (!item.editable) {
                             const valueSpan = document.querySelector(`span.text-lg.font-bold[data-item="${item.label}"]`);
                             if (valueSpan) {
-                                valueSpan.textContent = formatValue(currentValue !== undefined ? currentValue : item.value, item.format);
+                                let displayValue = currentValues[key] !== undefined ? currentValues[key] : item.value;
+                                valueSpan.textContent = formatValue(displayValue, item.format);
                             }
                         }
                     });
