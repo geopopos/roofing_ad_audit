@@ -338,6 +338,7 @@ function renderQuestion(index) {
 
         // Attach Google Places Autocomplete for the city question
         if (question.id === 1) {
+            console.log('Attaching autocomplete for city question');
             attachAutocomplete();
         }
 
