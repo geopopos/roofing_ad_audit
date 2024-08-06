@@ -247,12 +247,23 @@
                                     // Recalculate all downstream values
                                     if (key === 'costperlead') {
                                         currentValues.numberOfLeads = Math.floor(currentValues.totalMarketingCost / newValue);
+                                    } else if (key === 'leadtoappointmentconversion') {
+                                        currentValues.leadToAppointmentConversion = newValue;
+                                    } else if (key === 'appointmenttoshowconversion') {
+                                        currentValues.appointmentToShowConversion = newValue;
+                                    } else if (key === 'showtosaleconversion') {
+                                        currentValues.showToSaleConversion = newValue;
+                                    } else if (key === 'averagesalevalue') {
+                                        currentValues.averageSaleValue = newValue;
+                                    } else {
+                                        currentValues[key] = newValue;
                                     }
+
                                     currentValues.numberOfAppointments = Math.floor(currentValues.numberOfLeads * (currentValues.leadToAppointmentConversion / 100));
                                     currentValues.numberOfShows = Math.floor(currentValues.numberOfAppointments * (currentValues.appointmentToShowConversion / 100));
                                     currentValues.numberOfSales = Math.floor(currentValues.numberOfShows * (currentValues.showToSaleConversion / 100));
                                     currentValues.totalRevenue = currentValues.numberOfSales * currentValues.averageSaleValue;
-                    
+
                                     currentValues.costPerLead = currentValues.totalMarketingCost / currentValues.numberOfLeads;
                                     currentValues.costPerAppointment = currentValues.totalMarketingCost / currentValues.numberOfAppointments;
                                     currentValues.costPerShow = currentValues.totalMarketingCost / currentValues.numberOfShows;
