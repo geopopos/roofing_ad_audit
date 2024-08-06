@@ -281,10 +281,8 @@
                     section.items.forEach(item => {
                         const key = item.label.toLowerCase().replace(/ /g, '');
                         const inputElement = document.querySelector(`input[data-item="${item.label}"]`);
-                        const originalValueSpan = document.querySelector(`.original-value[data-item="${item.label}"]`);
-                        const initialValueDiv = document.querySelector(`.initial-value[data-item="${item.label}"]`);
-                        const currentValueSpan = document.querySelector(`.current-value[data-item="${item.label}"]`);
                         const originalValueDiv = document.querySelector(`.original-value[data-item="${item.label}"]`);
+                        const currentValueSpan = document.querySelector(`.current-value[data-item="${item.label}"]`);
                         
                         if (inputElement && currentValues[key] !== undefined) {
                             let formattedValue = formatValue(currentValues[key], item.format);
