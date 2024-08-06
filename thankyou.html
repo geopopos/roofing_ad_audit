@@ -34,7 +34,6 @@
         function formatValue(value, format) {
             if (isNaN(value)) {
                 return 'N/A';
-            }
             switch (format) {
                 case 'currency':
                     return `$${value.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
