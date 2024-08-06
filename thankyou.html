@@ -289,21 +289,15 @@
                             inputElement.value = formattedValue;
                         }
                         
-                        if (originalValueDiv) {
-                            if (!originalValueDiv.dataset.originalValue) {
-                                let originalValue = item.value;
-                                originalValueDiv.textContent = `Original: ${formatValue(originalValue, item.format)}`;
-                                originalValueDiv.dataset.originalValue = originalValue;
-                            }
+                        if (originalValueDiv && !originalValueDiv.dataset.originalValue) {
+                            let originalValue = item.value;
+                            originalValueDiv.textContent = `Original: ${formatValue(originalValue, item.format)}`;
+                            originalValueDiv.dataset.originalValue = originalValue;
                         }
                         
                         if (currentValueSpan) {
-                            let currentValue = currentValues[key];
-                            if (currentValue !== undefined) {
-                                currentValueSpan.textContent = `Current: ${formatValue(currentValue, item.format)}`;
-                            } else {
-                                currentValueSpan.textContent = `Current: ${formatValue(item.value, item.format)}`;
-                            }
+                            let currentValue = currentValues[key] !== undefined ? currentValues[key] : item.value;
+                            currentValueSpan.textContent = `Current: ${formatValue(currentValue, item.format)}`;
                         }
 
                         if (!item.editable) {
