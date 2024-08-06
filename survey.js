@@ -296,16 +296,7 @@ function initAutocomplete() {
     }
 }
 
-function loadGoogleMapsScript() {
-    const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyBBRsLUBwQWLvJIfZtySPCK2HHD75HNap8&libraries=places&callback=initAutocomplete`;
-    script.async = true;
-    script.defer = true;
-    document.head.appendChild(script);
-}
-
-// Call this function when the page loads
-window.addEventListener('load', loadGoogleMapsScript);
+// The Google Maps script is now loaded in the HTML file
 
 function renderQuestion(index) {
     console.log('Rendering question:', index);
