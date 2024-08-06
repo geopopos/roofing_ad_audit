@@ -215,12 +215,14 @@
                                 </div>
                                 <span class="text-sm font-medium text-gray-500 original-value" data-item="${item.label}">${formattedValue}</span>
                             </div>
+                            <div class="text-sm text-gray-500 mt-1 initial-value hidden" data-item="${item.label}">Initial: ${formattedValue}</div>
                             ${comparisonText}
                         `;
 
                         if (item.editable) {
                             const input = itemDiv.querySelector('input');
                             const editIcon = itemDiv.querySelector('.edit-icon');
+                            const initialValueDiv = itemDiv.querySelector('.initial-value');
                             
                             input.addEventListener('change', (e) => {
                                 let newValue = parseFloat(e.target.value.replace(/[^0-9.-]+/g,""));
@@ -259,6 +261,7 @@
                                     currentValues.costPerSale = currentValues.totalMarketingCost / currentValues.numberOfSales;
                                     currentValues.roas = currentValues.totalRevenue / currentValues.totalMarketingCost;
                                     
+                                    initialValueDiv.classList.remove('hidden');
                                     updateResults();
                                 }
                             });
