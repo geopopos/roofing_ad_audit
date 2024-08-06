@@ -315,12 +315,10 @@
                         const currentValueSpan = document.querySelector(`.current-value[data-item="${item.label}"]`);
                         const originalValueDiv = document.querySelector(`.original-value[data-item="${item.label}"]`);
                         
-                        if (!originalValueDiv.dataset.originalSet) {
-                            let originalValue = item.value;
-                            originalValueDiv.textContent = `Original: ${formatValue(originalValue, item.format)}`;
-                            originalValueDiv.dataset.originalSet = 'true';
-                            originalValueDiv.dataset.originalValue = originalValue;
-                        }
+                        // Set the original value as soon as the page loads
+                        let originalValue = item.value;
+                        originalValueDiv.textContent = `Original: ${formatValue(originalValue, item.format)}`;
+                        originalValueDiv.dataset.originalValue = originalValue;
                         
                         // Always show the current value
                         currentValueSpan.textContent = `Current: ${formatValue(currentValues[item.label.toLowerCase().replace(/ /g, '')], item.format)}`;
