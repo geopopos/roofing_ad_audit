@@ -225,9 +225,9 @@
                                         `<span class="text-lg font-bold">${formattedValue}</span>`
                                     }
                                 </div>
-                                <span class="text-sm font-medium text-gray-500 original-value" data-item="${item.label}"></span>
+                                <span class="text-sm font-medium text-gray-500 current-value" data-item="${item.label}"></span>
                             </div>
-                            <div class="text-sm text-gray-500 mt-1 initial-value" data-item="${item.label}"></div>
+                            <div class="text-sm text-gray-500 mt-1 original-value" data-item="${item.label}"></div>
                             ${comparisonText}
                         `;
 
@@ -312,18 +312,18 @@
                             }
                             inputElement.value = formattedValue;
                         }
-                        if (!originalValueSpan.dataset.originalSet) {
+                        const currentValueSpan = document.querySelector(`.current-value[data-item="${item.label}"]`);
+                        const originalValueDiv = document.querySelector(`.original-value[data-item="${item.label}"]`);
+                        
+                        if (!originalValueDiv.dataset.originalSet) {
                             let originalValue = item.value;
-                            originalValueSpan.textContent = formatValue(originalValue, item.format);
-                            originalValueSpan.dataset.originalSet = 'true';
-                            originalValueSpan.dataset.originalValue = originalValue;
+                            originalValueDiv.textContent = `Original: ${formatValue(originalValue, item.format)}`;
+                            originalValueDiv.dataset.originalSet = 'true';
+                            originalValueDiv.dataset.originalValue = originalValue;
                         }
-                        if (initialValueDiv && !initialValueDiv.dataset.originalSet) {
-                            initialValueDiv.textContent = `Original: ${formatValue(item.value, item.format)}`;
-                            initialValueDiv.dataset.originalSet = 'true';
-                        }
-                        // Always show the original value
-                        originalValueSpan.textContent = `Current: ${formatValue(currentValues[item.label.toLowerCase().replace(/ /g, '')], item.format)}`;
+                        
+                        // Always show the current value
+                        currentValueSpan.textContent = `Current: ${formatValue(currentValues[item.label.toLowerCase().replace(/ /g, '')], item.format)}`;
                     });
                 });
             }
