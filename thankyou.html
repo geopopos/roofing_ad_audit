@@ -292,11 +292,9 @@
                         }
                         
                         if (originalValueDiv) {
-                            if (!originalValueDiv.dataset.originalValue) {
-                                let originalValue = item.value;
-                                originalValueDiv.textContent = `Original: ${formatValue(originalValue, item.format)}`;
-                                originalValueDiv.dataset.originalValue = originalValue;
-                            }
+                            let originalValue = currentValues[key] !== undefined ? currentValues[key] : item.value;
+                            originalValueDiv.textContent = `Original: ${formatValue(originalValue, item.format)}`;
+                            originalValueDiv.dataset.originalValue = originalValue;
                         }
                         
                         if (currentValueSpan) {
