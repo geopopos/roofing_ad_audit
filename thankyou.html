@@ -208,7 +208,7 @@
                                         `<span class="text-lg font-bold">${formattedValue}</span>`
                                     }
                                 </div>
-                                <span class="text-sm font-medium text-gray-500 updated-value" data-item="${item.label}"></span>
+                                <span class="text-sm font-medium text-gray-500 original-value" data-item="${item.label}">${formattedValue}</span>
                             </div>
                             ${comparisonText}
                         `;
@@ -264,11 +264,12 @@
                     resultsDiv.appendChild(sectionDiv);
                 });
 
-                // Update all the "updated-value" spans
+                // Update all the values
                 results.forEach(section => {
                     section.items.forEach(item => {
-                        const updatedValueSpan = document.querySelector(`.updated-value[data-item="${item.label}"]`);
-                        if (updatedValueSpan) {
+                        const inputElement = document.querySelector(`input[data-item="${item.label}"]`);
+                        const originalValueSpan = document.querySelector(`.original-value[data-item="${item.label}"]`);
+                        if (inputElement) {
                             let formattedValue;
                             switch (item.format) {
                                 case 'currency':
@@ -282,7 +283,10 @@
                                     formattedValue = item.value.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
                                     break;
                             }
-                            updatedValueSpan.textContent = formattedValue;
+                            inputElement.value = formattedValue;
+                        }
+                        if (originalValueSpan) {
+                            originalValueSpan.textContent = originalValueSpan.textContent || formattedValue;
                         }
                     });
                 });
