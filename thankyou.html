@@ -273,20 +273,21 @@
                             let formattedValue;
                             switch (item.format) {
                                 case 'currency':
-                                    formattedValue = `$${item.value.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                                    formattedValue = `$${currentValues[item.label.toLowerCase().replace(/ /g, '')].toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
                                     break;
                                 case 'percent':
-                                    formattedValue = `${item.value.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}%`;
+                                    formattedValue = `${currentValues[item.label.toLowerCase().replace(/ /g, '')].toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}%`;
                                     break;
                                 case 'number':
                                 default:
-                                    formattedValue = item.value.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                                    formattedValue = currentValues[item.label.toLowerCase().replace(/ /g, '')].toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
                                     break;
                             }
                             inputElement.value = formattedValue;
                         }
-                        if (originalValueSpan) {
-                            originalValueSpan.textContent = originalValueSpan.textContent || formattedValue;
+                        if (originalValueSpan && !originalValueSpan.dataset.originalSet) {
+                            originalValueSpan.textContent = formattedValue;
+                            originalValueSpan.dataset.originalSet = 'true';
                         }
                     });
                 });
