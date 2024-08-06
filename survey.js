@@ -298,6 +298,17 @@ function initAutocomplete() {
 
 // The Google Maps script is now loaded in the HTML file
 
+function attachAutocomplete() {
+    if (currentQuestionIndex === 0) {
+        if (typeof google !== 'undefined' && typeof google.maps !== 'undefined') {
+            initAutocomplete();
+        } else {
+            // If Google Maps API is not loaded yet, wait and try again
+            setTimeout(attachAutocomplete, 100);
+        }
+    }
+}
+
 function renderQuestion(index) {
     console.log('Rendering question:', index);
     const question = questions[index];
@@ -324,10 +335,8 @@ function renderQuestion(index) {
 
         questionContainer.innerHTML = html;
 
-        // Initialize Google Places Autocomplete for the city question
-        if (question.id === 1) {
-            initAutocomplete();
-        }
+        // Attach Google Places Autocomplete for the city question
+        attachAutocomplete();
 
         // ... (rest of the function)
     }, 300);
