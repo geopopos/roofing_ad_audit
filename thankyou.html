@@ -32,7 +32,9 @@
     </div>
     <script>
         function formatValue(value, format) {
-            switch (format) {
+            if (isNaN(value)) {
+                return 'N/A';
+            }
                 case 'currency':
                     return `$${value.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
                 case 'percent':
@@ -242,7 +244,6 @@
                                 let newValue = parseFloat(e.target.value.replace(/[^0-9.-]+/g,""));
                                 if (!isNaN(newValue)) {
                                     const key = item.label.toLowerCase().replace(/ /g, '');
-                                    const originalValue = originalValues[key];
                                     currentValues[key] = newValue;
 
                                     // Recalculate all downstream values
