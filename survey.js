@@ -357,6 +357,7 @@ function renderQuestion(index) {
     questionContainer.classList.add('fade-out');
 
     setTimeout(() => {
+        console.log('Inside setTimeout for rendering question');
         // Update progress bar
         updateProgress(index);
 
@@ -391,7 +392,10 @@ function renderQuestion(index) {
             break;
     }
 
+    console.log('Setting innerHTML');
     questionContainer.innerHTML = html;
+
+    console.log('Question type:', question.type);
 
     // Add event listeners for radio buttons
     if (question.type === 'radio') {
@@ -445,8 +449,10 @@ function renderQuestion(index) {
 
     // Add event listener for text, number, tel, and email inputs
     if (['text', 'number', 'tel', 'email'].includes(question.type)) {
+        console.log('Adding event listeners for input');
         const input = document.getElementById(`q${question.id}`);
         input.addEventListener('input', (event) => {
+            console.log('Input event fired');
             if (question.format) {
                 question.format(input);
             }
