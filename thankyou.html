@@ -321,7 +321,21 @@
                         originalValueDiv.dataset.originalValue = originalValue;
                         
                         // Always show the current value
-                        currentValueSpan.textContent = `Current: ${formatValue(currentValues[item.label.toLowerCase().replace(/ /g, '')], item.format)}`;
+                        let currentValue = currentValues[item.label.toLowerCase().replace(/ /g, '')];
+                        if (currentValue !== undefined) {
+                            currentValueSpan.textContent = `Current: ${formatValue(currentValue, item.format)}`;
+                        } else {
+                            // If the current value is not in currentValues, use the item's value
+                            currentValueSpan.textContent = `Current: ${formatValue(item.value, item.format)}`;
+                        }
+
+                        // Update the displayed value for non-editable items
+                        if (!item.editable) {
+                            const valueSpan = document.querySelector(`span.text-lg.font-bold[data-item="${item.label}"]`);
+                            if (valueSpan) {
+                                valueSpan.textContent = formatValue(currentValue !== undefined ? currentValue : item.value, item.format);
+                            }
+                        }
                     });
                 });
             }
