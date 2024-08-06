@@ -218,43 +218,37 @@
                                     switch (item.label) {
                                         case 'Total Marketing Cost':
                                             currentValues.totalMarketingCost = newValue;
-                                            currentValues.costPerLead = newValue / currentValues.numberOfLeads;
-                                            currentValues.costPerAppointment = newValue / currentValues.numberOfAppointments;
-                                            currentValues.costPerShow = newValue / currentValues.numberOfShows;
-                                            currentValues.costPerSale = newValue / currentValues.numberOfSales;
-                                            currentValues.roas = currentValues.totalRevenue / newValue;
+                                            currentValues.numberOfLeads = Math.floor(currentValues.totalMarketingCost / currentValues.costPerLead);
                                             break;
                                         case 'Cost per Lead':
                                             currentValues.costPerLead = newValue;
-                                            currentValues.numberOfLeads = currentValues.totalMarketingCost / newValue;
-                                            currentValues.leadToAppointmentConversion = (currentValues.numberOfAppointments / currentValues.numberOfLeads) * 100;
+                                            currentValues.numberOfLeads = Math.floor(currentValues.totalMarketingCost / newValue);
                                             break;
                                         case 'Lead to Appointment Conversion':
                                             currentValues.leadToAppointmentConversion = newValue;
-                                            currentValues.numberOfAppointments = currentValues.numberOfLeads * (newValue / 100);
-                                            currentValues.costPerAppointment = currentValues.totalMarketingCost / currentValues.numberOfAppointments;
-                                            currentValues.appointmentToShowConversion = (currentValues.numberOfShows / currentValues.numberOfAppointments) * 100;
                                             break;
                                         case 'Appointment to Show Conversion':
                                             currentValues.appointmentToShowConversion = newValue;
-                                            currentValues.numberOfShows = currentValues.numberOfAppointments * (newValue / 100);
-                                            currentValues.costPerShow = currentValues.totalMarketingCost / currentValues.numberOfShows;
-                                            currentValues.showToSaleConversion = (currentValues.numberOfSales / currentValues.numberOfShows) * 100;
                                             break;
                                         case 'Show to Sale Conversion':
                                             currentValues.showToSaleConversion = newValue;
-                                            currentValues.numberOfSales = currentValues.numberOfShows * (newValue / 100);
-                                            currentValues.costPerSale = currentValues.totalMarketingCost / currentValues.numberOfSales;
-                                            currentValues.totalRevenue = currentValues.numberOfSales * currentValues.averageSaleValue;
-                                            currentValues.roas = currentValues.totalRevenue / currentValues.totalMarketingCost;
                                             break;
                                         case 'Average Sale Value':
                                             currentValues.averageSaleValue = newValue;
-                                            currentValues.totalRevenue = currentValues.numberOfSales * newValue;
-                                            currentValues.roas = currentValues.totalRevenue / currentValues.totalMarketingCost;
                                             break;
                                     }
-                                    calculateDerivedValues();
+                                    
+                                    // Recalculate all downstream values
+                                    currentValues.numberOfAppointments = Math.floor(currentValues.numberOfLeads * (currentValues.leadToAppointmentConversion / 100));
+                                    currentValues.numberOfShows = Math.floor(currentValues.numberOfAppointments * (currentValues.appointmentToShowConversion / 100));
+                                    currentValues.numberOfSales = Math.floor(currentValues.numberOfShows * (currentValues.showToSaleConversion / 100));
+                                    currentValues.totalRevenue = currentValues.numberOfSales * currentValues.averageSaleValue;
+                                    
+                                    currentValues.costPerAppointment = currentValues.totalMarketingCost / currentValues.numberOfAppointments;
+                                    currentValues.costPerShow = currentValues.totalMarketingCost / currentValues.numberOfShows;
+                                    currentValues.costPerSale = currentValues.totalMarketingCost / currentValues.numberOfSales;
+                                    currentValues.roas = currentValues.totalRevenue / currentValues.totalMarketingCost;
+                                    
                                     updateResults();
                                 }
                             });
