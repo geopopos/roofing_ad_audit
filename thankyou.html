@@ -34,6 +34,7 @@
         function formatValue(value, format) {
             if (isNaN(value)) {
                 return 'N/A';
+            }
             switch (format) {
                 case 'currency':
                     return `$${value.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
@@ -42,7 +43,6 @@
                 case 'number':
                 default:
                     return value.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-            }
             }
         }
 
@@ -243,6 +243,7 @@
                                 if (!isNaN(newValue)) {
                                     const key = item.label.toLowerCase().replace(/ /g, '');
                                     if (!isNaN(newValue)) {
+                                        const key = item.label.toLowerCase().replace(/ /g, '');
                                         currentValues[key] = newValue;
 
                                         // Recalculate all downstream values
@@ -273,8 +274,6 @@
 
                                         updateResults();
                                     }
-                                    
-                                    updateResults();
                                 }
                             });
 
