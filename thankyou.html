@@ -31,6 +31,18 @@
         <div id="results" class="space-y-4"></div>
     </div>
     <script>
+        function formatValue(value, format) {
+            switch (format) {
+                case 'currency':
+                    return `$${value.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                case 'percent':
+                    return `${value.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}%`;
+                case 'number':
+                default:
+                    return value.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             const params = new URLSearchParams(window.location.search);
             const resultsDiv = document.getElementById('results');
@@ -300,14 +312,18 @@
                             }
                             inputElement.value = formattedValue;
                         }
-                        if (originalValueSpan && !originalValueSpan.dataset.originalSet) {
-                            originalValueSpan.textContent = item.value.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                        if (!originalValueSpan.dataset.originalSet) {
+                            let originalValue = item.value;
+                            originalValueSpan.textContent = formatValue(originalValue, item.format);
                             originalValueSpan.dataset.originalSet = 'true';
+                            originalValueSpan.dataset.originalValue = originalValue;
                         }
                         if (initialValueDiv && !initialValueDiv.dataset.originalSet) {
-                            initialValueDiv.textContent = `Initial: ${item.value.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                            initialValueDiv.textContent = `Initial: ${formatValue(item.value, item.format)}`;
                             initialValueDiv.dataset.originalSet = 'true';
                         }
+                        // Always show the original value
+                        originalValueSpan.textContent = formatValue(parseFloat(originalValueSpan.dataset.originalValue), item.format);
                     });
                 });
             }
