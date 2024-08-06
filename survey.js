@@ -670,7 +670,8 @@ function submitSurvey() {
         roas: (results.roas || 0).toFixed(2),
         name: answers[9] || '',
         phoneNumber: answers[10] || '',
-        email: answers[11] || ''
+        email: answers[11] || '',
+        yesNoScheduleAudit: answers[13] || ''
     });
 
     // Extract city, state, and country from the city field
