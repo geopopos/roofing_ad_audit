@@ -13,15 +13,24 @@
         <h2 id="customer-name" class="text-2xl font-semibold mb-4 text-gray-700"></h2>
         <h3 class="text-xl font-semibold mb-4 text-gray-700">Roofer's Calculator Results:</h3>
         <h4 id="city-info" class="text-lg font-semibold mb-4 text-gray-600"></h4>
-        <div id="results" class="space-y-4"></div>
-        <div id="legend" class="mt-8 p-4 bg-gray-100 rounded-lg">
+        <div id="legend" class="mb-6 p-4 bg-gray-100 rounded-lg">
             <h4 class="text-lg font-semibold mb-2">Legend:</h4>
-            <ul class="list-disc list-inside">
-                <li class="text-red-600">Red: Area that needs focus</li>
-                <li class="text-green-600">Green: Better than average</li>
-                <li class="text-black">Black: About average</li>
-            </ul>
+            <div class="flex space-x-4">
+                <div class="flex items-center">
+                    <span class="w-3 h-3 rounded-full bg-red-600 mr-2"></span>
+                    <span>Area that needs focus</span>
+                </div>
+                <div class="flex items-center">
+                    <span class="w-3 h-3 rounded-full bg-green-600 mr-2"></span>
+                    <span>Better than average</span>
+                </div>
+                <div class="flex items-center">
+                    <span class="w-3 h-3 rounded-full bg-gray-400 mr-2"></span>
+                    <span>About average</span>
+                </div>
+            </div>
         </div>
+        <div id="results" class="space-y-4"></div>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -46,13 +55,13 @@
             function getColorClass(value, average, isHigherBetter = false) {
                 const ratio = value / average;
                 if (isHigherBetter) {
-                    if (ratio > 1.1) return 'text-green-600';
-                    if (ratio < 0.9) return 'text-red-600';
+                    if (ratio > 1.1) return 'bg-green-600';
+                    if (ratio < 0.9) return 'bg-red-600';
                 } else {
-                    if (ratio < 0.9) return 'text-green-600';
-                    if (ratio > 1.1) return 'text-red-600';
+                    if (ratio < 0.9) return 'bg-green-600';
+                    if (ratio > 1.1) return 'bg-red-600';
                 }
-                return 'text-black';
+                return 'bg-gray-400';
             }
 
             // Define average values (you may want to replace these with actual industry averages)
@@ -132,7 +141,7 @@
                     const itemDiv = document.createElement('div');
                     itemDiv.className = 'bg-white p-3 rounded shadow';
 
-                    let colorClass = 'text-black';
+                    let colorClass = 'bg-gray-400';
                     let comparisonText = '';
                     if (item.compare) {
                         const value = parseFloat(params.get(item.compare));
@@ -145,7 +154,7 @@
                             (percentDifference < 0 ? 'better' : 'worse');
                         
                         comparisonText = `
-                            <div class="text-sm mt-1 ${colorClass}">
+                            <div class="text-sm mt-1">
                                 ${Math.abs(percentDifference)}% ${betterWorse} than average
                             </div>
                         `;
@@ -153,7 +162,10 @@
 
                     itemDiv.innerHTML = `
                         <div class="text-sm font-medium text-gray-500">${item.label}</div>
-                        <div class="text-lg font-bold ${colorClass}">${item.value}</div>
+                        <div class="flex items-center">
+                            <span class="w-3 h-3 rounded-full ${colorClass} mr-2"></span>
+                            <span class="text-lg font-bold">${item.value}</span>
+                        </div>
                         ${comparisonText}
                     `;
                     grid.appendChild(itemDiv);
