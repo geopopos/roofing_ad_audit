@@ -243,15 +243,19 @@
                                     currentValues[key] = newValue;
 
                                     // Recalculate all downstream values
-                                    currentValues.numberOfAppointments = Math.floor(currentValues.numberOfLeads * (currentValues.leadtoappointmentconversion / 100));
-                                    currentValues.numberOfShows = Math.floor(currentValues.numberOfAppointments * (currentValues.appointmenttoshowconversion / 100));
-                                    currentValues.numberOfSales = Math.floor(currentValues.numberOfShows * (currentValues.showtosaleconversion / 100));
-                                    currentValues.totalRevenue = currentValues.numberOfSales * currentValues.averagesalevalue;
-                                    
-                                    currentValues.costperappointment = currentValues.totalmarketingcost / currentValues.numberOfAppointments;
-                                    currentValues.costpershow = currentValues.totalmarketingcost / currentValues.numberOfShows;
-                                    currentValues.costpersale = currentValues.totalmarketingcost / currentValues.numberOfSales;
-                                    currentValues.roas = currentValues.totalRevenue / currentValues.totalmarketingcost;
+                                    if (key === 'costperlead') {
+                                        currentValues.numberOfLeads = Math.floor(currentValues.totalMarketingCost / newValue);
+                                    }
+                                    currentValues.numberOfAppointments = Math.floor(currentValues.numberOfLeads * (currentValues.leadToAppointmentConversion / 100));
+                                    currentValues.numberOfShows = Math.floor(currentValues.numberOfAppointments * (currentValues.appointmentToShowConversion / 100));
+                                    currentValues.numberOfSales = Math.floor(currentValues.numberOfShows * (currentValues.showToSaleConversion / 100));
+                                    currentValues.totalRevenue = currentValues.numberOfSales * currentValues.averageSaleValue;
+                    
+                                    currentValues.costPerLead = currentValues.totalMarketingCost / currentValues.numberOfLeads;
+                                    currentValues.costPerAppointment = currentValues.totalMarketingCost / currentValues.numberOfAppointments;
+                                    currentValues.costPerShow = currentValues.totalMarketingCost / currentValues.numberOfShows;
+                                    currentValues.costPerSale = currentValues.totalMarketingCost / currentValues.numberOfSales;
+                                    currentValues.roas = currentValues.totalRevenue / currentValues.totalMarketingCost;
                                     
                                     if (initialValueDiv) {
                                         initialValueDiv.classList.remove('hidden');
