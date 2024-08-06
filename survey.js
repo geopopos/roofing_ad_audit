@@ -479,6 +479,13 @@ function renderQuestion(index) {
         // Set focus on the input field
         setTimeout(() => input.focus(), 0);
     }
+
+    // Attach Google Places Autocomplete for the city question
+    if (question.id === 1) {
+        console.log('Attaching autocomplete for city question');
+        attachAutocomplete();
+    }
+
     updateButtons();
 
     // Fade in the new question
